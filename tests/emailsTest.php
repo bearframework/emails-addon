@@ -100,10 +100,10 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $this->assertEquals($attachments[1]->mimeType, 'text/plain');
         $embeds = $email->embeds->getList();
         $this->assertEquals($embeds[0]->filename, '/path/to/file2.jpg');
-        $this->assertEquals($embeds[0]->name, 'file2.jpg');
+        $this->assertEquals($embeds[0]->cid, 'file2.jpg');
         $this->assertEquals($embeds[0]->mimeType, 'image/jpeg');
         $this->assertEquals($embeds[1]->content, 'text2');
-        $this->assertEquals($embeds[1]->name, 'text2.txt');
+        $this->assertEquals($embeds[1]->cid, 'text2.txt');
         $this->assertEquals($embeds[1]->mimeType, 'text/plain');
         $signers = $email->signers->getList();
         $this->assertEquals($signers[0]->certificate, 'content of certificate.pem');

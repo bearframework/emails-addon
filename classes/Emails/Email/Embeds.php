@@ -24,35 +24,35 @@ class Embeds
      * Add a file.
      * 
      * @param string $filename The filename of the embed.
-     * @param string|null $name The file name.
+     * @param string|null $cid The cid (content ID) of the embed.
      * @param string|null $mimeType The mime type of the embed.
      */
-    public function addFile(string $filename, string $name = null, string $mimeType = null): void
+    public function addFile(string $filename, string $cid = null, string $mimeType = null): void
     {
         $embed = new \BearFramework\Emails\Email\FileEmbed();
         $embed->filename = $filename;
-        if ($name !== null) {
-            $embed->name = $name;
+        if ($cid !== null) {
+            $embed->cid = $cid;
         }
         if ($mimeType !== null) {
             $embed->mimeType = $mimeType;
         }
         $this->data[] = $embed;
     }
-    
+
     /**
      * Add a content.
      * 
      * @param string $content The content of the embed.
-     * @param string|null $name The file name.
+     * @param string|null $cid The cid (content ID) of the embed.
      * @param string|null $mimeType The mime type of the embed.
      */
-    public function addContent(string $content, string $name = null, string $mimeType = null): void
+    public function addContent(string $content, string $cid = null, string $mimeType = null): void
     {
         $embed = new \BearFramework\Emails\Email\ContentEmbed();
         $embed->content = $content;
-        if ($name !== null) {
-            $embed->name = $name;
+        if ($cid !== null) {
+            $embed->cid = $cid;
         }
         if ($mimeType !== null) {
             $embed->mimeType = $mimeType;
