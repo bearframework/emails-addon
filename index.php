@@ -27,6 +27,7 @@ $context->classes
         ->add('BearFramwork\Emails\Email\FileEmbed', 'classes/Emails/Email/FileEmbed.php')
         ->add('BearFramwork\Emails\Email\Recipient', 'classes/Emails/Email/Recipient.php')
         ->add('BearFramwork\Emails\Email\Recipients', 'classes/Emails/Email/Recipients.php')
+        ->add('BearFramwork\Emails\Email\ReplyTo', 'classes/Emails/Email/ReplyTo.php')
         ->add('BearFramwork\Emails\Email\SMIMESigner', 'classes/Emails/Email/SMIMESigner.php')
         ->add('BearFramwork\Emails\Email\Sender', 'classes/Emails/Email/Sender.php')
         ->add('BearFramwork\Emails\Email\Signer', 'classes/Emails/Email/Signer.php')

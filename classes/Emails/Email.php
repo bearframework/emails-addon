@@ -11,6 +11,7 @@ namespace BearFramework\Emails;
 
 /**
  * @property-read \BearFramework\Emails\Email\Sender $sender
+ * @property-read \BearFramework\Emails\Email\ReplyTo $replyTo
  * @property-read \BearFramework\Emails\Email\Recipients $recipients
  * @property string|null $subject
  * @property-read \BearFramework\Emails\Email\Content $content
@@ -30,6 +31,12 @@ class Email
         $this->defineProperty('sender', [
             'init' => function() {
                 return new \BearFramework\Emails\Email\Sender();
+            },
+            'readonly' => true
+        ]);
+        $this->defineProperty('replyTo', [
+            'init' => function() {
+                return new \BearFramework\Emails\Email\ReplyTo();
             },
             'readonly' => true
         ]);

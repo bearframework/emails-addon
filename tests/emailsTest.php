@@ -33,6 +33,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
             $this->assertEquals($email->subject, null);
             $this->assertEquals($email->sender->email, null);
             $this->assertEquals($email->sender->name, null);
+            $this->assertEquals($email->replyTo->email, null);
+            $this->assertEquals($email->replyTo->name, null);
             $this->assertEquals($email->returnPath, null);
             $this->assertEquals($email->priority, null);
             $recipients = $email->recipients->getList();
@@ -55,6 +57,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->subject = 'The subject';
         $email->sender->email = 'sender@example.com';
         $email->sender->name = 'John Smith';
+        $email->replyTo->email = 'replyto@example.com';
+        $email->replyTo->name = 'John';
         $email->returnPath = 'bounce@example.com';
         $email->priority = 3;
         $email->recipients->add('recipient1@example.com', 'Mark Smith');
@@ -71,6 +75,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $this->assertEquals($email->subject, 'The subject');
         $this->assertEquals($email->sender->email, 'sender@example.com');
         $this->assertEquals($email->sender->name, 'John Smith');
+        $this->assertEquals($email->replyTo->email, 'replyto@example.com');
+        $this->assertEquals($email->replyTo->name, 'John');
         $this->assertEquals($email->returnPath, 'bounce@example.com');
         $this->assertEquals($email->priority, 3);
         $recipients = $email->recipients->getList();
@@ -109,6 +115,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->subject = null;
         $email->sender->email = null;
         $email->sender->name = null;
+        $email->replyTo->email = null;
+        $email->replyTo->name = null;
         $email->returnPath = null;
         $email->priority = null;
         $email->recipients->clear();
