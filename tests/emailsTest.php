@@ -67,8 +67,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->content->add('Hi', 'text/plain');
         $email->attachments->addFile('/path/to/file1.jpg', 'file1.jpg', 'image/jpeg');
         $email->attachments->addContent('text1', 'text1.txt', 'text/plain');
-        $email->embeds->addFile('/path/to/file2.jpg', 'file2.jpg', 'image/jpeg');
-        $email->embeds->addContent('text2', 'text2.txt', 'text/plain');
+        $email->embeds->addFile('embed1', '/path/to/file2.jpg', 'file2.jpg', 'image/jpeg');
+        $email->embeds->addContent('embed2', 'text2', 'text2.txt', 'text/plain');
         $email->signers->addSMIME('content of certificate.pem', 'content of private-key.pem');
         $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
 
@@ -99,11 +99,13 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $this->assertEquals($attachments[1]->name, 'text1.txt');
         $this->assertEquals($attachments[1]->mimeType, 'text/plain');
         $embeds = $email->embeds->getList();
+        $this->assertEquals($embeds[0]->cid, 'embed1');
         $this->assertEquals($embeds[0]->filename, '/path/to/file2.jpg');
-        $this->assertEquals($embeds[0]->cid, 'file2.jpg');
+        $this->assertEquals($embeds[0]->name, 'file2.jpg');
         $this->assertEquals($embeds[0]->mimeType, 'image/jpeg');
+        $this->assertEquals($embeds[1]->cid, 'embed2');
         $this->assertEquals($embeds[1]->content, 'text2');
-        $this->assertEquals($embeds[1]->cid, 'text2.txt');
+        $this->assertEquals($embeds[1]->name, 'text2.txt');
         $this->assertEquals($embeds[1]->mimeType, 'text/plain');
         $signers = $email->signers->getList();
         $this->assertEquals($signers[0]->certificate, 'content of certificate.pem');

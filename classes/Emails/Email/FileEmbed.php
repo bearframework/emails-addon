@@ -10,8 +10,9 @@
 namespace BearFramework\Emails\Email;
 
 /**
- * @property string|null $filename The filename of the embed.
  * @property string|null $cid The cid (content ID) of the embed.
+ * @property string|null $filename The filename of the embed.
+ * @property string|null $name The name of the embed.
  * @property string|null $mimeType The mime type of the embed.
  */
 class FileEmbed
@@ -21,10 +22,13 @@ class FileEmbed
 
     function __construct()
     {
+        $this->defineProperty('cid', [
+            'type' => '?string'
+        ]);
         $this->defineProperty('filename', [
             'type' => '?string'
         ]);
-        $this->defineProperty('cid', [
+        $this->defineProperty('name', [
             'type' => '?string'
         ]);
         $this->defineProperty('mimeType', [
