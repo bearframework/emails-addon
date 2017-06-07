@@ -17,6 +17,16 @@ class DummyEmailSender implements \BearFramework\Emails\ISender
 
 }
 
+class DummyFaultyEmailSender implements \BearFramework\Emails\ISender
+{
+
+    public function send(\BearFramework\Emails\Email $email): bool
+    {
+        return false;
+    }
+
+}
+
 /**
  * @runTestsInSeparateProcesses
  */
@@ -140,6 +150,75 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email = $app->emails->make();
         $app->emails->send($email);
         // expect no exception
+    }
+
+    /**
+     * 
+     */
+    public function testHooks1()
+    {
+        $app = $this->getApp();
+        $app->emails->registerSender('DummyEmailSender');
+
+        $log = '';
+
+        $app->hooks->add('emailSend', function (\BearFramework\Emails\Hooks\EmailSend $data) use (&$log) {
+            $log .= '1' . $data->email->sender->email;
+        });
+        $app->hooks->add('emailSent', function (\BearFramework\Emails\Hooks\EmailSent $data) use (&$log) {
+            $log .= '2' . $data->email->sender->email;
+        });
+        $email = $app->emails->make();
+        $email->sender->email = 'example@example.com';
+        $app->emails->send($email);
+        $this->assertEquals($log, '1example@example.com2example@example.com');
+    }
+
+    /**
+     * Invalid sender
+     */
+    public function testHooks2()
+    {
+        $app = $this->getApp();
+        $app->emails->registerSender('DummyFaultyEmailSender');
+
+        $log = '';
+
+        $app->hooks->add('emailSend', function (\BearFramework\Emails\Hooks\EmailSend $data) use (&$log) {
+            $log .= '1' . $data->email->sender->email;
+        });
+        $app->hooks->add('emailSent', function (\BearFramework\Emails\Hooks\EmailSent $data) use (&$log) {
+            $log .= '2' . $data->email->sender->email;
+        });
+        $email = $app->emails->make();
+        $email->sender->email = 'example@example.com';
+        $this->setExpectedException('Exception');
+        $app->emails->send($email);
+        $this->assertEquals($log, '1example@example.com');
+    }
+
+    /**
+     * Canceled email
+     */
+    public function testHooks3()
+    {
+        $app = $this->getApp();
+        $app->emails->registerSender('DummyEmailSender');
+
+        $log = '';
+
+        $app->hooks->add('emailSend', function (\BearFramework\Emails\Hooks\EmailSend $data) use (&$log) {
+            $data->canceled = true;
+            $data->canceledReason = "Not cool";
+            $log .= '1' . $data->email->sender->email;
+        });
+        $app->hooks->add('emailSent', function (\BearFramework\Emails\Hooks\EmailSent $data) use (&$log) {
+            $log .= '2' . $data->email->sender->email;
+        });
+        $email = $app->emails->make();
+        $email->sender->email = 'example@example.com';
+        $app->emails->send($email);
+        $this->assertEquals($log, '1example@example.com');
     }
 
 }
