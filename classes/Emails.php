@@ -50,41 +50,42 @@ class Emails
      */
     function send(\BearFramework\Emails\Email $email): void
     {
+        $app = App::get();
+        $email = clone($email);
+
+        $getEmailAsText = function($email) {
+            $emailAsText = 'Sender: ' . $email->sender->email . (strlen($email->sender->name) > 0 ? ' (' . $email->sender->name . ')' : '') . "\n";
+            $recipients = $email->recipients->getList();
+            foreach ($recipients as $recipient) {
+                $emailAsText .= 'Recipient: ' . $recipient->email . (strlen($recipient->name) > 0 ? ' (' . $recipient->name . ')' : '') . "\n";
+            }
+            $emailAsText .= 'Subject: ' . $email->subject . "\n";
+            $contentParts = $email->content->getList();
+            foreach ($contentParts as $contentPart) {
+                $emailAsText .= 'Content (' . $contentPart->mimeType . '):' . "\n" . $contentPart->content . "\n";
+            }
+            return $emailAsText;
+        };
+
+        if ($app->hooks->exists('emailSend')) {
+            $preventDefault = false;
+            $app->hooks->execute('emailSend', $email, $preventDefault);
+            if ($preventDefault) {
+                $app->logger->log('email', 'Default email sender cancelled.' . "\n" . $getEmailAsText($email));
+                return;
+            }
+        }
+
         if (empty($this->senders)) {
             throw new \Exception('No email senders added.');
         }
 
-        $emailAsText = 'Sender: ' . $email->sender->email . (strlen($email->sender->name) > 0 ? ' (' . $email->sender->name . ')' : '') . "\n";
-        $recipients = $email->recipients->getList();
-        foreach ($recipients as $recipient) {
-            $emailAsText .= 'Recipient: ' . $recipient->email . (strlen($recipient->name) > 0 ? ' (' . $recipient->name . ')' : '') . "\n";
-        }
-        $emailAsText .= 'Subject: ' . $email->subject . "\n";
-        $contentParts = $email->content->getList();
-        foreach ($contentParts as $contentPart) {
-            $emailAsText .= 'Content (' . $contentPart->mimeType . '):' . "\n" . $contentPart->content . "\n";
-        }
-
-        $app = App::get();
-        if ($app->hooks->exists('emailSend')) {
-            $data = new \BearFramework\Emails\Hooks\EmailSend();
-            $data->email = $email;
-            $app->hooks->execute('emailSend', $data);
-            if ($data->canceled) {
-                $app->logger->log('email', 'Email canceled.' . "\n" . $emailAsText);
-                return;
-            }
-        }
         foreach ($this->senders as $class) {
             $sender = new $class();
             if ($sender instanceof \BearFramework\Emails\ISender) {
                 if ($sender->send($email)) {
-                    if ($app->hooks->exists('emailSent')) {
-                        $data = new \BearFramework\Emails\Hooks\EmailSent();
-                        $data->email = $email;
-                        $app->hooks->execute('emailSent', $data);
-                    }
-                    $app->logger->log('email', 'Email sent.' . "\n" . $emailAsText);
+                    $app->logger->log('email', 'Email sent.' . "\n" . $getEmailAsText($email));
+                    $app->hooks->execute('emailSent', $email);
                     return;
                 }
             }

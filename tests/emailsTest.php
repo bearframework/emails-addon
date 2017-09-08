@@ -162,11 +162,11 @@ class EmailsTest extends BearFrameworkAddonTestCase
 
         $log = '';
 
-        $app->hooks->add('emailSend', function (\BearFramework\Emails\Hooks\EmailSend $data) use (&$log) {
-            $log .= '1' . $data->email->sender->email;
+        $app->hooks->add('emailSend', function (\BearFramework\Emails\Email $email) use (&$log) {
+            $log .= '1' . $email->sender->email;
         });
-        $app->hooks->add('emailSent', function (\BearFramework\Emails\Hooks\EmailSent $data) use (&$log) {
-            $log .= '2' . $data->email->sender->email;
+        $app->hooks->add('emailSent', function (\BearFramework\Emails\Email $email) use (&$log) {
+            $log .= '2' . $email->sender->email;
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';
@@ -184,17 +184,16 @@ class EmailsTest extends BearFrameworkAddonTestCase
 
         $log = '';
 
-        $app->hooks->add('emailSend', function (\BearFramework\Emails\Hooks\EmailSend $data) use (&$log) {
-            $log .= '1' . $data->email->sender->email;
+        $app->hooks->add('emailSend', function (\BearFramework\Emails\Email $email) use (&$log) {
+            $log .= '1' . $email->sender->email;
         });
-        $app->hooks->add('emailSent', function (\BearFramework\Emails\Hooks\EmailSent $data) use (&$log) {
-            $log .= '2' . $data->email->sender->email;
+        $app->hooks->add('emailSent', function (\BearFramework\Emails\Email $email) use (&$log) {
+            $log .= '2' . $email->sender->email;
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';
         $this->setExpectedException('Exception');
         $app->emails->send($email);
-        $this->assertEquals($log, '1example@example.com');
     }
 
     /**
@@ -207,13 +206,12 @@ class EmailsTest extends BearFrameworkAddonTestCase
 
         $log = '';
 
-        $app->hooks->add('emailSend', function (\BearFramework\Emails\Hooks\EmailSend $data) use (&$log) {
-            $data->canceled = true;
-            $data->canceledReason = "Not cool";
-            $log .= '1' . $data->email->sender->email;
+        $app->hooks->add('emailSend', function (\BearFramework\Emails\Email $email, &$preventDefault) use (&$log) {
+            $preventDefault = true;
+            $log .= '1' . $email->sender->email;
         });
-        $app->hooks->add('emailSent', function (\BearFramework\Emails\Hooks\EmailSent $data) use (&$log) {
-            $log .= '2' . $data->email->sender->email;
+        $app->hooks->add('emailSent', function (\BearFramework\Emails\Email $email) use (&$log) {
+            $log .= '2' . $email->sender->email;
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';

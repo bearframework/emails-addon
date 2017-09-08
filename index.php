@@ -31,9 +31,7 @@ $context->classes
         ->add('BearFramework\Emails\Email\SMIMESigner', 'classes/Emails/Email/SMIMESigner.php')
         ->add('BearFramework\Emails\Email\Sender', 'classes/Emails/Email/Sender.php')
         ->add('BearFramework\Emails\Email\Signer', 'classes/Emails/Email/Signer.php')
-        ->add('BearFramework\Emails\Email\Signers', 'classes/Emails/Email/Signers.php')
-        ->add('BearFramework\Emails\Hooks\EmailSend', 'classes/Emails/Hooks/EmailSend.php')
-        ->add('BearFramework\Emails\Hooks\EmailSent', 'classes/Emails/Hooks/EmailSent.php');
+        ->add('BearFramework\Emails\Email\Signers', 'classes/Emails/Email/Signers.php');
 
 $app->shortcuts
         ->add('emails', function() {
