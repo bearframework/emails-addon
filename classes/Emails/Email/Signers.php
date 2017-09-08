@@ -9,6 +9,9 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Emails\Email\SMIMESigner;
+use BearFramework\Emails\Email\DKIMSigner;
+
 /**
  */
 class Signers
@@ -28,7 +31,7 @@ class Signers
      */
     public function addSMIME(string $certificate, string $privateKey): void
     {
-        $signer = new \BearFramework\Emails\Email\SMIMESigner();
+        $signer = new SMIMESigner();
         $signer->certificate = $certificate;
         $signer->privateKey = $privateKey;
         $this->data[] = $signer;
@@ -43,7 +46,7 @@ class Signers
      */
     public function addDKIM(string $privateKey, string $domain, string $selector): void
     {
-        $signer = new \BearFramework\Emails\Email\DKIMSigner();
+        $signer = new DKIMSigner();
         $signer->privateKey = $privateKey;
         $signer->domain = $domain;
         $signer->selector = $selector;
@@ -70,6 +73,38 @@ class Signers
             $list[] = clone($signer);
         }
         return $list;
+    }
+
+    /**
+     * Returns the object data converted as an array
+     * 
+     * @return array The object data converted as an array
+     */
+    public function toArray()
+    {
+        $result = [];
+        foreach ($this->data as $signer) {
+            $signerData = $signer->toArray();
+            $type = 'unknown';
+            if ($signer instanceof SMIMESigner) {
+                $type = 'SMIME';
+            } elseif ($signer instanceof DKIMSigner) {
+                $type = 'DKIM';
+            }
+            $signerData = array_merge(['type' => $type], $signerData);
+            $result[] = $signerData;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the object data converted as JSON
+     * 
+     * @return string The object data converted as JSON
+     */
+    public function toJSON()
+    {
+        return json_encode($this->toArray());
     }
 
 }

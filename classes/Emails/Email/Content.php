@@ -62,4 +62,28 @@ class Content
         return $list;
     }
 
+    /**
+     * Returns the object data converted as an array
+     * 
+     * @return array The object data converted as an array
+     */
+    public function toArray()
+    {
+        $result = [];
+        foreach ($this->data as $contentPart) {
+            $result[] = $contentPart->toArray();
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the object data converted as JSON
+     * 
+     * @return string The object data converted as JSON
+     */
+    public function toJSON()
+    {
+        return json_encode($this->toArray());
+    }
+
 }

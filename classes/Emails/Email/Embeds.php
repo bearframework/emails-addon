@@ -9,6 +9,9 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Emails\Email\FileEmbed;
+use BearFramework\Emails\Email\ContentEmbed;
+
 /**
  */
 class Embeds
@@ -30,7 +33,7 @@ class Embeds
      */
     public function addFile(string $cid, string $filename, string $name = null, string $mimeType = null): void
     {
-        $embed = new \BearFramework\Emails\Email\FileEmbed();
+        $embed = new FileEmbed();
         $embed->cid = $cid;
         $embed->filename = $filename;
         if ($name !== null) {
@@ -52,7 +55,7 @@ class Embeds
      */
     public function addContent(string $cid, string $content, string $name = null, string $mimeType = null): void
     {
-        $embed = new \BearFramework\Emails\Email\ContentEmbed();
+        $embed = new ContentEmbed();
         $embed->cid = $cid;
         $embed->content = $content;
         if ($name !== null) {
@@ -84,6 +87,38 @@ class Embeds
             $list[] = clone($embed);
         }
         return $list;
+    }
+
+    /**
+     * Returns the object data converted as an array
+     * 
+     * @return array The object data converted as an array
+     */
+    public function toArray()
+    {
+        $result = [];
+        foreach ($this->data as $embed) {
+            $embedData = $embed->toArray();
+            $type = 'unknown';
+            if ($embed instanceof FileEmbed) {
+                $type = 'file';
+            } elseif ($embed instanceof ContentEmbed) {
+                $type = 'content';
+            }
+            $embedData = array_merge(['type' => $type], $embedData);
+            $result[] = $embedData;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the object data converted as JSON
+     * 
+     * @return string The object data converted as JSON
+     */
+    public function toJSON()
+    {
+        return json_encode($this->toArray());
     }
 
 }

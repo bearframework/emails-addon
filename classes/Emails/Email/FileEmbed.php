@@ -19,6 +19,8 @@ class FileEmbed
 {
 
     use \IvoPetkov\DataObjectTrait;
+    use \IvoPetkov\DataObjectToArrayTrait;
+    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {

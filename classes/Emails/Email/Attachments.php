@@ -9,6 +9,9 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Emails\Email\FileAttachment;
+use BearFramework\Emails\Email\ContentAttachment;
+
 /**
  */
 class Attachments
@@ -29,7 +32,7 @@ class Attachments
      */
     public function addFile(string $filename, string $name = null, string $mimeType = null): void
     {
-        $attachment = new \BearFramework\Emails\Email\FileAttachment();
+        $attachment = new FileAttachment();
         $attachment->filename = $filename;
         if ($name !== null) {
             $attachment->name = $name;
@@ -39,7 +42,7 @@ class Attachments
         }
         $this->data[] = $attachment;
     }
-    
+
     /**
      * Add a content.
      * 
@@ -49,7 +52,7 @@ class Attachments
      */
     public function addContent(string $content, string $name = null, string $mimeType = null): void
     {
-        $attachment = new \BearFramework\Emails\Email\ContentAttachment();
+        $attachment = new ContentAttachment();
         $attachment->content = $content;
         if ($name !== null) {
             $attachment->name = $name;
@@ -80,6 +83,38 @@ class Attachments
             $list[] = clone($attachment);
         }
         return $list;
+    }
+
+    /**
+     * Returns the object data converted as an array
+     * 
+     * @return array The object data converted as an array
+     */
+    public function toArray()
+    {
+        $result = [];
+        foreach ($this->data as $attachment) {
+            $attachmentData = $attachment->toArray();
+            $type = 'unknown';
+            if ($attachment instanceof FileAttachment) {
+                $type = 'file';
+            } elseif ($attachment instanceof ContentAttachment) {
+                $type = 'content';
+            }
+            $attachmentData = array_merge(['type' => $type], $attachmentData);
+            $result[] = $attachmentData;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the object data converted as JSON
+     * 
+     * @return string The object data converted as JSON
+     */
+    public function toJSON()
+    {
+        return json_encode($this->toArray());
     }
 
 }

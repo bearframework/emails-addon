@@ -58,4 +58,28 @@ class Recipients
         return $list;
     }
 
+    /**
+     * Returns the object data converted as an array
+     * 
+     * @return array The object data converted as an array
+     */
+    public function toArray()
+    {
+        $result = [];
+        foreach ($this->data as $recipient) {
+            $result[] = $recipient->toArray();
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the object data converted as JSON
+     * 
+     * @return string The object data converted as JSON
+     */
+    public function toJSON()
+    {
+        return json_encode($this->toArray());
+    }
+
 }

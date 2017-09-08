@@ -219,4 +219,115 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $this->assertEquals($log, '1example@example.com');
     }
 
+    /**
+     * 
+     */
+    public function testToArrayAndToJSON()
+    {
+        $app = $this->getApp();
+        $email = $app->emails->make();
+
+        $email->subject = 'The subject';
+        $email->sender->email = 'sender@example.com';
+        $email->sender->name = 'John Smith';
+        $email->replyTo->email = 'replyto@example.com';
+        $email->replyTo->name = 'John';
+        $email->returnPath = 'bounce@example.com';
+        $email->priority = 3;
+        $email->recipients->add('recipient1@example.com', 'Mark Smith');
+        $email->recipients->add('recipient2@example.com', 'Bill Smith');
+        $email->content->add('<strong>Hi</strong>', 'text/html', 'utf-8');
+        $email->content->add('Hi', 'text/plain');
+        $email->attachments->addFile('/path/to/file1.jpg', 'file1.jpg', 'image/jpeg');
+        $email->attachments->addContent('text1', 'text1.txt', 'text/plain');
+        $email->embeds->addFile('embed1', '/path/to/file2.jpg', 'file2.jpg', 'image/jpeg');
+        $email->embeds->addContent('embed2', 'text2', 'text2.txt', 'text/plain');
+        $email->signers->addSMIME('content of certificate.pem', 'content of private-key.pem');
+        $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
+
+        $expectedResult = [
+            'attachments' => [
+                [
+                    'type' => 'file',
+                    'filename' => '/path/to/file1.jpg',
+                    'mimeType' => 'image/jpeg',
+                    'name' => 'file1.jpg',
+                ],
+                [
+                    'type' => 'content',
+                    'content' => 'text1',
+                    'mimeType' => 'text/plain',
+                    'name' => 'text1.txt',
+                ],
+            ],
+            'content' => [
+                [
+                    'content' => '<strong>Hi</strong>',
+                    'encoding' => 'utf-8',
+                    'mimeType' => 'text/html',
+                ],
+                [
+                    'content' => 'Hi',
+                    'encoding' => null,
+                    'mimeType' => 'text/plain',
+                ],
+            ],
+            'embeds' => [
+                [
+                    'type' => 'file',
+                    'cid' => 'embed1',
+                    'filename' => '/path/to/file2.jpg',
+                    'mimeType' => 'image/jpeg',
+                    'name' => 'file2.jpg',
+                ],
+                [
+                    'type' => 'content',
+                    'cid' => 'embed2',
+                    'content' => 'text2',
+                    'mimeType' => 'text/plain',
+                    'name' => 'text2.txt',
+                ],
+            ],
+            'priority' => 3,
+            'recipients' => [
+                [
+                    'email' => 'recipient1@example.com',
+                    'name' => 'Mark Smith',
+                ],
+                [
+                    'email' => 'recipient2@example.com',
+                    'name' => 'Bill Smith',
+                ],
+            ],
+            'replyTo' => [
+                'email' => 'replyto@example.com',
+                'name' => 'John',
+            ],
+            'returnPath' => 'bounce@example.com',
+            'sender' => [
+                'email' => 'sender@example.com',
+                'name' => 'John Smith',
+            ],
+            'signers' => [
+                [
+                    'type' => 'SMIME',
+                    'certificate' => 'content of certificate.pem',
+                    'privateKey' => 'content of private-key.pem',
+                ],
+                [
+                    'type' => 'DKIM',
+                    'domain' => 'example.com',
+                    'privateKey' => 'content of private-key.pem',
+                    'selector' => 'default',
+                ],
+            ],
+            'subject' => 'The subject',
+        ];
+
+        $emailAsArray = $email->toArray();
+        $emailAsJSON = $email->toJSON();
+        $this->assertTrue(serialize($expectedResult) === serialize($emailAsArray));
+        $this->assertTrue(json_encode($expectedResult) === $emailAsJSON);
+    }
+
 }
