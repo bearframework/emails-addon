@@ -10,10 +10,10 @@
 namespace BearFramework\Emails\Email;
 
 /**
- * @property string|null $email The email address of the reply to recipient.
- * @property string|null $name The name of the reply to recipient.
+ * @property string|null $email The email address of the cc recipient.
+ * @property string|null $name The name of the cc recipient.
  */
-class ReplyTo
+class CcRecipient
 {
 
     use \IvoPetkov\DataObjectTrait;

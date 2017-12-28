@@ -41,10 +41,15 @@ class EmailsTest extends BearFrameworkAddonTestCase
 
         $checkIsEmpty = function($email) {
             $this->assertEquals($email->subject, null);
+            $this->assertEquals($email->date, null);
             $this->assertEquals($email->sender->email, null);
             $this->assertEquals($email->sender->name, null);
-            $this->assertEquals($email->replyTo->email, null);
-            $this->assertEquals($email->replyTo->name, null);
+            $replyToRecipients = $email->replyToRecipients->getList();
+            $this->assertEquals($replyToRecipients->length, 0);
+            $ccRecipients = $email->ccRecipients->getList();
+            $this->assertEquals($ccRecipients->length, 0);
+            $bccRecipients = $email->bccRecipients->getList();
+            $this->assertEquals($bccRecipients->length, 0);
             $this->assertEquals($email->returnPath, null);
             $this->assertEquals($email->priority, null);
             $recipients = $email->recipients->getList();
@@ -65,10 +70,10 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $checkIsEmpty($email);
 
         $email->subject = 'The subject';
+        $email->date = 1514481017;
         $email->sender->email = 'sender@example.com';
         $email->sender->name = 'John Smith';
-        $email->replyTo->email = 'replyto@example.com';
-        $email->replyTo->name = 'John';
+        $email->replyToRecipients->add('replyto@example.com', 'John');
         $email->returnPath = 'bounce@example.com';
         $email->priority = 3;
         $email->recipients->add('recipient1@example.com', 'Mark Smith');
@@ -83,10 +88,12 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
 
         $this->assertEquals($email->subject, 'The subject');
+        $this->assertEquals($email->date, 1514481017);
         $this->assertEquals($email->sender->email, 'sender@example.com');
         $this->assertEquals($email->sender->name, 'John Smith');
-        $this->assertEquals($email->replyTo->email, 'replyto@example.com');
-        $this->assertEquals($email->replyTo->name, 'John');
+        $replyToRecipients = $email->replyToRecipients->getList();
+        $this->assertEquals($replyToRecipients[0]->email, 'replyto@example.com');
+        $this->assertEquals($replyToRecipients[0]->name, 'John');
         $this->assertEquals($email->returnPath, 'bounce@example.com');
         $this->assertEquals($email->priority, 3);
         $recipients = $email->recipients->getList();
@@ -125,10 +132,10 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $this->assertEquals($signers[1]->selector, 'default');
 
         $email->subject = null;
+        $email->date = null;
         $email->sender->email = null;
         $email->sender->name = null;
-        $email->replyTo->email = null;
-        $email->replyTo->name = null;
+        $email->replyToRecipients->clear();
         $email->returnPath = null;
         $email->priority = null;
         $email->recipients->clear();
@@ -228,10 +235,14 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email = $app->emails->make();
 
         $email->subject = 'The subject';
+        $email->date = 1514481017;
         $email->sender->email = 'sender@example.com';
         $email->sender->name = 'John Smith';
-        $email->replyTo->email = 'replyto@example.com';
-        $email->replyTo->name = 'John';
+        $email->replyToRecipients->add('replyto@example.com', 'John');
+        $email->bccRecipients->add('bcc1@example.com', 'Henry');
+        $email->bccRecipients->add('bcc2@example.com', 'Tom');
+        $email->ccRecipients->add('cc1@example.com', 'Jane');
+        $email->ccRecipients->add('cc2@example.com', 'Lisa');
         $email->returnPath = 'bounce@example.com';
         $email->priority = 3;
         $email->recipients->add('recipient1@example.com', 'Mark Smith');
@@ -260,6 +271,26 @@ class EmailsTest extends BearFrameworkAddonTestCase
                     'name' => 'text1.txt',
                 ],
             ],
+            'bccRecipients' => [
+                [
+                    'email' => 'bcc1@example.com',
+                    'name' => 'Henry',
+                ],
+                [
+                    'email' => 'bcc2@example.com',
+                    'name' => 'Tom',
+                ]
+            ],
+            'ccRecipients' => [
+                [
+                    'email' => 'cc1@example.com',
+                    'name' => 'Jane',
+                ],
+                [
+                    'email' => 'cc2@example.com',
+                    'name' => 'Lisa',
+                ]
+            ],
             'content' => [
                 [
                     'content' => '<strong>Hi</strong>',
@@ -272,6 +303,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
                     'mimeType' => 'text/plain',
                 ],
             ],
+            'date' => 1514481017,
             'embeds' => [
                 [
                     'type' => 'file',
@@ -299,9 +331,11 @@ class EmailsTest extends BearFrameworkAddonTestCase
                     'name' => 'Bill Smith',
                 ],
             ],
-            'replyTo' => [
-                'email' => 'replyto@example.com',
-                'name' => 'John',
+            'replyToRecipients' => [
+                [
+                    'email' => 'replyto@example.com',
+                    'name' => 'John',
+                ]
             ],
             'returnPath' => 'bounce@example.com',
             'sender' => [

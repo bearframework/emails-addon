@@ -11,8 +11,11 @@ namespace BearFramework\Emails;
 
 /**
  * @property-read \BearFramework\Emails\Email\Sender $sender
- * @property-read \BearFramework\Emails\Email\ReplyTo $replyTo
+ * @property-read \BearFramework\Emails\Email\ReplyToRecipients $replyToRecipients
  * @property-read \BearFramework\Emails\Email\Recipients $recipients
+ * @property-read \BearFramework\Emails\Email\CcRecipients $ccRecipients
+ * @property-read \BearFramework\Emails\Email\BccRecipients $bccRecipients
+ * @property int|null $date
  * @property string|null $subject
  * @property-read \BearFramework\Emails\Email\Content $content
  * @property string|null $returnPath
@@ -36,9 +39,9 @@ class Email
             },
             'readonly' => true
         ]);
-        $this->defineProperty('replyTo', [
+        $this->defineProperty('replyToRecipients', [
             'init' => function() {
-                return new \BearFramework\Emails\Email\ReplyTo();
+                return new \BearFramework\Emails\Email\ReplyToRecipients();
             },
             'readonly' => true
         ]);
@@ -48,8 +51,23 @@ class Email
             },
             'readonly' => true
         ]);
+        $this->defineProperty('ccRecipients', [
+            'init' => function() {
+                return new \BearFramework\Emails\Email\CcRecipients();
+            },
+            'readonly' => true
+        ]);
+        $this->defineProperty('bccRecipients', [
+            'init' => function() {
+                return new \BearFramework\Emails\Email\BccRecipients();
+            },
+            'readonly' => true
+        ]);
         $this->defineProperty('subject', [
             'type' => '?string'
+        ]);
+        $this->defineProperty('date', [
+            'type' => '?int'
         ]);
         $this->defineProperty('content', [
             'init' => function() {
