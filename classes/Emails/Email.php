@@ -23,6 +23,7 @@ namespace BearFramework\Emails;
  * @property-read \BearFramework\Emails\Email\Attachments $attachments
  * @property-read \BearFramework\Emails\Email\Embeds $embeds
  * @property-read \BearFramework\Emails\Email\Signers $signers
+ * @property-read \BearFramework\Emails\Email\Headers $headers
  */
 class Email
 {
@@ -96,6 +97,12 @@ class Email
         $this->defineProperty('signers', [
             'init' => function() {
                 return new \BearFramework\Emails\Email\Signers();
+            },
+            'readonly' => true
+        ]);
+        $this->defineProperty('headers', [
+            'init' => function() {
+                return new \BearFramework\Emails\Email\Headers();
             },
             'readonly' => true
         ]);

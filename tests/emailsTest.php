@@ -62,6 +62,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
             $this->assertEquals($embeds->length, 0);
             $signers = $email->signers->getList();
             $this->assertEquals($signers->length, 0);
+            $headers = $email->headers->getList();
+            $this->assertEquals($headers->length, 0);
         };
 
         $app = $this->getApp();
@@ -86,6 +88,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->embeds->addContent('embed2', 'text2', 'text2.txt', 'text/plain');
         $email->signers->addSMIME('content of certificate.pem', 'content of private-key.pem');
         $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
+        $email->headers->add('X-Custom-1', 'value1');
+        $email->headers->add('X-Custom-2', 'value2');
 
         $this->assertEquals($email->subject, 'The subject');
         $this->assertEquals($email->date, 1514481017);
@@ -130,6 +134,11 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $this->assertEquals($signers[1]->privateKey, 'content of private-key.pem');
         $this->assertEquals($signers[1]->domain, 'example.com');
         $this->assertEquals($signers[1]->selector, 'default');
+        $headers = $email->headers->getList();
+        $this->assertEquals($headers[0]->name, 'X-Custom-1');
+        $this->assertEquals($headers[0]->value, 'value1');
+        $this->assertEquals($headers[1]->name, 'X-Custom-2');
+        $this->assertEquals($headers[1]->value, 'value2');
 
         $email->subject = null;
         $email->date = null;
@@ -143,6 +152,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->attachments->clear();
         $email->embeds->clear();
         $email->signers->clear();
+        $email->headers->clear();
 
         $checkIsEmpty($email);
     }
@@ -255,6 +265,8 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->embeds->addContent('embed2', 'text2', 'text2.txt', 'text/plain');
         $email->signers->addSMIME('content of certificate.pem', 'content of private-key.pem');
         $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
+        $email->headers->add('X-Custom-1', 'value1');
+        $email->headers->add('X-Custom-2', 'value2');
 
         $expectedResult = [
             'attachments' => [
@@ -320,6 +332,16 @@ class EmailsTest extends BearFrameworkAddonTestCase
                     'name' => 'text2.txt',
                 ],
             ],
+            'headers' => [
+                [
+                    'name' => 'X-Custom-1',
+                    'value' => 'value1',
+                ],
+                [
+                    'name' => 'X-Custom-2',
+                    'value' => 'value2',
+                ]
+            ],
             'priority' => 3,
             'recipients' => [
                 [
@@ -362,6 +384,17 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $emailAsJSON = $email->toJSON();
         $this->assertTrue(serialize($expectedResult) === serialize($emailAsArray));
         $this->assertTrue(json_encode($expectedResult) === $emailAsJSON);
+    }
+
+    /**
+     * 
+     */
+    public function testAddInvalidHeader()
+    {
+        $app = $this->getApp();
+        $email = $app->emails->make();
+        $this->setExpectedException('InvalidArgumentException');
+        $email->headers->add('From', 'example@example.com');
     }
 
 }

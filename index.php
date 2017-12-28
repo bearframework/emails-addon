@@ -29,6 +29,8 @@ $context->classes
         ->add('BearFramework\Emails\Email\Embeds', 'classes/Emails/Email/Embeds.php')
         ->add('BearFramework\Emails\Email\FileAttachment', 'classes/Emails/Email/FileAttachment.php')
         ->add('BearFramework\Emails\Email\FileEmbed', 'classes/Emails/Email/FileEmbed.php')
+        ->add('BearFramework\Emails\Email\Header', 'classes/Emails/Email/Header.php')
+        ->add('BearFramework\Emails\Email\Headers', 'classes/Emails/Email/Headers.php')
         ->add('BearFramework\Emails\Email\Recipient', 'classes/Emails/Email/Recipient.php')
         ->add('BearFramework\Emails\Email\Recipients', 'classes/Emails/Email/Recipients.php')
         ->add('BearFramework\Emails\Email\ReplyToRecipient', 'classes/Emails/Email/ReplyToRecipient.php')
