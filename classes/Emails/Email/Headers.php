@@ -30,7 +30,7 @@ class Headers
     public function add(string $name, string $value): void
     {
         $lowerCaseName = strtolower($name);
-        if (in_array($lowerCaseName, ['from', 'reply-to', 'to', 'cc', 'bcc', 'date', 'subject', 'return-path', 'priority'])) {
+        if (in_array($lowerCaseName, ['from', 'reply-to', 'to', 'cc', 'bcc', 'date', 'subject', 'return-path', 'x-priority'])) {
             throw new \InvalidArgumentException('A header named "' . $name . '" cannot be set. Please use the corresponding property.');
         }
         $header = new \BearFramework\Emails\Email\Header();
