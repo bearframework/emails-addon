@@ -160,10 +160,51 @@ class EmailsTest extends BearFrameworkAddonTestCase
     /**
      * 
      */
-    public function testSend()
+    public function testSend1()
     {
         $app = $this->getApp();
         $app->emails->registerSender('DummyEmailSender');
+        $email = $app->emails->make();
+        $app->emails->send($email);
+        // expect no exception
+    }
+
+    /**
+     * 
+     */
+    public function testSend2()
+    {
+        $app = $this->getApp();
+        $sender = new DummyEmailSender();
+        $app->emails->registerSender($sender);
+        $email = $app->emails->make();
+        $app->emails->send($email);
+        // expect no exception
+    }
+
+    /**
+     *
+     */
+    public function testSend3()
+    {
+        $app = $this->getApp();
+        $app->emails->registerSender(function () {
+            return 'DummyEmailSender';
+        });
+        $email = $app->emails->make();
+        $app->emails->send($email);
+        // expect no exception
+    }
+
+    /**
+     * 
+     */
+    public function testSend4()
+    {
+        $app = $this->getApp();
+        $app->emails->registerSender(function () {
+            return new DummyEmailSender();
+        });
         $email = $app->emails->make();
         $app->emails->send($email);
         // expect no exception

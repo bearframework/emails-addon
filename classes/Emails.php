@@ -65,8 +65,13 @@ class Emails
             throw new \Exception('No email senders added.');
         }
 
-        foreach ($this->senders as $class) {
-            $sender = new $class();
+        foreach ($this->senders as $sender) {
+            if (is_callable($sender)) {
+                $sender = call_user_func($sender);
+            }
+            if (is_string($sender)) {
+                $sender = new $sender();
+            }
             if ($sender instanceof \BearFramework\Emails\ISender) {
                 if ($sender->send($email)) {
                     $app->hooks->execute('emailSent', $email);
@@ -80,12 +85,12 @@ class Emails
     /**
      * Registers a email sender.
      * 
-     * @param string $class The class name of the email sender to register.
+     * @param string $class A class name, an object or a callback that returns a class name or and object.
      * @return void No value is returned.
      */
-    function registerSender(string $class): void
+    function registerSender($sender): void
     {
-        $this->senders[] = $class;
+        $this->senders[] = $sender;
     }
 
 }
