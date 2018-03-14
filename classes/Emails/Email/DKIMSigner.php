@@ -14,23 +14,28 @@ namespace BearFramework\Emails\Email;
  * @property string $domain
  * @property string $selector
  */
-class DKIMSigner
+class DKIMSigner extends Signer
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('privateKey', [
-            'type' => 'string'
-        ]);
-        $this->defineProperty('domain', [
-            'type' => 'string'
-        ]);
-        $this->defineProperty('selector', [
-            'type' => 'string'
+        parent::__construct();
+        $this
+                ->defineProperty('type', [
+                    'type' => 'string',
+                    'get' => function() {
+                        return 'DKIM';
+                    },
+                    'readonly' => true
+                ])
+                ->defineProperty('privateKey', [
+                    'type' => 'string'
+                ])
+                ->defineProperty('domain', [
+                    'type' => 'string'
+                ])
+                ->defineProperty('selector', [
+                    'type' => 'string'
         ]);
     }
 

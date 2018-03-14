@@ -13,20 +13,25 @@ namespace BearFramework\Emails\Email;
  * @property string $certificate
  * @property string $privateKey
  */
-class SMIMESigner
+class SMIMESigner extends Signer
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('certificate', [
-            'type' => 'string'
-        ]);
-        $this->defineProperty('privateKey', [
-            'type' => 'string'
+        parent::__construct();
+        $this
+                ->defineProperty('type', [
+                    'type' => 'string',
+                    'get' => function() {
+                        return 'SMIME';
+                    },
+                    'readonly' => true
+                ])
+                ->defineProperty('certificate', [
+                    'type' => 'string'
+                ])
+                ->defineProperty('privateKey', [
+                    'type' => 'string'
         ]);
     }
 

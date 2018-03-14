@@ -9,32 +9,33 @@
 
 namespace BearFramework\Emails\Email;
 
-use BearFramework\Emails\Email\SMIMESigner;
-use BearFramework\Emails\Email\DKIMSigner;
+use BearFramework\Models\ModelsRepository;
 
 /**
  */
-class Signers
+class Signers extends ModelsRepository
 {
 
     /**
-     *
-     * @var array 
+     * 
      */
-    private $data = [];
+    public function __construct()
+    {
+        $this->setModel(Signer::class);
+    }
 
     /**
      * Add a SMIME signer.
      * 
      * @param string $certificate
-     * @param string $private
+     * @param string $privateKey
      */
     public function addSMIME(string $certificate, string $privateKey): void
     {
         $signer = new SMIMESigner();
         $signer->certificate = $certificate;
         $signer->privateKey = $privateKey;
-        $this->data[] = $signer;
+        $this->set($signer);
     }
 
     /**
@@ -50,61 +51,39 @@ class Signers
         $signer->privateKey = $privateKey;
         $signer->domain = $domain;
         $signer->selector = $selector;
-        $this->data[] = $signer;
+        $this->set($signer);
     }
 
     /**
-     * Removes the added signers.
-     */
-    public function clear()
-    {
-        $this->data = [];
-    }
-
-    /**
-     * Returns a list of added signers.
      * 
-     * @return array A list of added signers.
+     * @param array $data
      */
-    public function getList()
+    public function __fromArray(array $data): void
     {
-        $list = new \IvoPetkov\DataList();
-        foreach ($this->data as $signer) {
-            $list[] = clone($signer);
-        }
-        return $list;
-    }
-
-    /**
-     * Returns the object data converted as an array
-     * 
-     * @return array The object data converted as an array
-     */
-    public function toArray()
-    {
-        $result = [];
-        foreach ($this->data as $signer) {
-            $signerData = $signer->toArray();
-            $type = 'unknown';
-            if ($signer instanceof SMIMESigner) {
-                $type = 'SMIME';
-            } elseif ($signer instanceof DKIMSigner) {
-                $type = 'DKIM';
+        foreach ($data as $item) {
+            if (is_array($item) && isset($item['type'])) {
+                switch ($item['type']) {
+                    case 'SMIME':
+                        $this->set(SMIMESigner::fromArray($item));
+                        break;
+                    case 'DKIM':
+                        $this->set(DKIMSigner::fromArray($item));
+                        break;
+                    default :
+                        $this->set(Signer::fromArray($item));
+                        break;
+                }
             }
-            $signerData = array_merge(['type' => $type], $signerData);
-            $result[] = $signerData;
         }
-        return $result;
     }
 
     /**
-     * Returns the object data converted as JSON
      * 
-     * @return string The object data converted as JSON
+     * @param string $data
      */
-    public function toJSON()
+    public function __fromJSON(string $data): void
     {
-        return json_encode($this->toArray());
+        $this->__fromArray(json_decode($data, true));
     }
 
 }

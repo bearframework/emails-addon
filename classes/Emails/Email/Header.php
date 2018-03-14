@@ -9,24 +9,24 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Models\Model;
+
 /**
  * @property string|null $name The name of the custom header.
  * @property string|null $value The value of the custom header.
  */
-class Header
+class Header extends Model
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('name', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('value', [
-            'type' => '?string'
+        parent::__construct();
+        $this
+                ->defineProperty('name', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('value', [
+                    'type' => '?string'
         ]);
     }
 

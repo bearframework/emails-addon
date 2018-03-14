@@ -9,19 +9,20 @@
 
 namespace BearFramework\Emails\Email;
 
-use BearFramework\Emails\Email\FileEmbed;
-use BearFramework\Emails\Email\ContentEmbed;
+use BearFramework\Models\ModelsRepository;
 
 /**
  */
-class Embeds
+class Embeds extends ModelsRepository
 {
 
     /**
-     *
-     * @var array 
+     * 
      */
-    private $data = [];
+    public function __construct()
+    {
+        $this->setModel(Embed::class);
+    }
 
     /**
      * Add a file.
@@ -42,7 +43,7 @@ class Embeds
         if ($mimeType !== null) {
             $embed->mimeType = $mimeType;
         }
-        $this->data[] = $embed;
+        $this->set($embed);
     }
 
     /**
@@ -64,61 +65,39 @@ class Embeds
         if ($mimeType !== null) {
             $embed->mimeType = $mimeType;
         }
-        $this->data[] = $embed;
+        $this->set($embed);
     }
 
     /**
-     * Removes the added embeds.
-     */
-    public function clear()
-    {
-        $this->data = [];
-    }
-
-    /**
-     * Returns a list of added embeds.
      * 
-     * @return array A list of added embeds.
+     * @param array $data
      */
-    public function getList()
+    public function __fromArray(array $data): void
     {
-        $list = new \IvoPetkov\DataList();
-        foreach ($this->data as $embed) {
-            $list[] = clone($embed);
-        }
-        return $list;
-    }
-
-    /**
-     * Returns the object data converted as an array
-     * 
-     * @return array The object data converted as an array
-     */
-    public function toArray()
-    {
-        $result = [];
-        foreach ($this->data as $embed) {
-            $embedData = $embed->toArray();
-            $type = 'unknown';
-            if ($embed instanceof FileEmbed) {
-                $type = 'file';
-            } elseif ($embed instanceof ContentEmbed) {
-                $type = 'content';
+        foreach ($data as $item) {
+            if (is_array($item) && isset($item['type'])) {
+                switch ($item['type']) {
+                    case 'content':
+                        $this->set(ContentEmbed::fromArray($item));
+                        break;
+                    case 'file':
+                        $this->set(FileEmbed::fromArray($item));
+                        break;
+                    default :
+                        $this->set(Embed::fromArray($item));
+                        break;
+                }
             }
-            $embedData = array_merge(['type' => $type], $embedData);
-            $result[] = $embedData;
         }
-        return $result;
     }
 
     /**
-     * Returns the object data converted as JSON
      * 
-     * @return string The object data converted as JSON
+     * @param string $data
      */
-    public function toJSON()
+    public function __fromJSON(string $data): void
     {
-        return json_encode($this->toArray());
+        $this->__fromArray(json_decode($data, true));
     }
 
 }

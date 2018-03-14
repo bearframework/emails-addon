@@ -9,16 +9,20 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Models\ModelsRepository;
+
 /**
  */
-class CcRecipients
+class CcRecipients extends ModelsRepository
 {
 
     /**
-     *
-     * @var array 
+     * 
      */
-    private $data = [];
+    public function __construct()
+    {
+        $this->setModel(CcRecipient::class);
+    }
 
     /**
      * Add a cc recipient.
@@ -28,58 +32,12 @@ class CcRecipients
      */
     public function add(string $email, string $name = null): void
     {
-        $ccRecipient = new \BearFramework\Emails\Email\CcRecipient();
+        $ccRecipient = $this->make();
         $ccRecipient->email = $email;
         if ($name !== null) {
             $ccRecipient->name = $name;
         }
-        $this->data[] = $ccRecipient;
-    }
-
-    /**
-     * Removes the added cc recipients.
-     */
-    public function clear()
-    {
-        $this->data = [];
-    }
-
-    /**
-     * Returns a list of added cc recipients.
-     * 
-     * @return BearFramework\Emails\Email\CcRecipient[] A list of added cc recipients.
-     */
-    public function getList()
-    {
-        $list = new \IvoPetkov\DataList();
-        foreach ($this->data as $ccRecipient) {
-            $list[] = clone($ccRecipient);
-        }
-        return $list;
-    }
-
-    /**
-     * Returns the object data converted as an array
-     * 
-     * @return array The object data converted as an array
-     */
-    public function toArray()
-    {
-        $result = [];
-        foreach ($this->data as $ccRecipient) {
-            $result[] = $ccRecipient->toArray();
-        }
-        return $result;
-    }
-
-    /**
-     * Returns the object data converted as JSON
-     * 
-     * @return string The object data converted as JSON
-     */
-    public function toJSON()
-    {
-        return json_encode($this->toArray());
+        $this->set($ccRecipient);
     }
 
 }

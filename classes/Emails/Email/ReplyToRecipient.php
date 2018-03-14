@@ -9,24 +9,24 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Models\Model;
+
 /**
  * @property string|null $email The email address of the reply to recipient.
  * @property string|null $name The name of the reply to recipient.
  */
-class ReplyToRecipient
+class ReplyToRecipient extends Model
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('email', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('name', [
-            'type' => '?string'
+        parent::__construct();
+        $this
+                ->defineProperty('email', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('name', [
+                    'type' => '?string'
         ]);
     }
 

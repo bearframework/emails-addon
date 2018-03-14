@@ -15,26 +15,31 @@ namespace BearFramework\Emails\Email;
  * @property string|null $name The name of the embed.
  * @property string|null $mimeType The mime type of the embed.
  */
-class ContentEmbed
+class ContentEmbed extends Embed
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('cid', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('content', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('name', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('mimeType', [
-            'type' => '?string'
+        parent::__construct();
+        $this
+                ->defineProperty('type', [
+                    'type' => 'string',
+                    'get' => function() {
+                        return 'content';
+                    },
+                    'readonly' => true
+                ])
+                ->defineProperty('cid', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('content', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('name', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('mimeType', [
+                    'type' => '?string'
         ]);
     }
 

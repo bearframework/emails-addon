@@ -144,15 +144,15 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email->date = null;
         $email->sender->email = null;
         $email->sender->name = null;
-        $email->replyToRecipients->clear();
+        $email->replyToRecipients->deleteAll();
         $email->returnPath = null;
         $email->priority = null;
-        $email->recipients->clear();
-        $email->content->clear();
-        $email->attachments->clear();
-        $email->embeds->clear();
-        $email->signers->clear();
-        $email->headers->clear();
+        $email->recipients->deleteAll();
+        $email->content->deleteAll();
+        $email->attachments->deleteAll();
+        $email->embeds->deleteAll();
+        $email->signers->deleteAll();
+        $email->headers->deleteAll();
 
         $checkIsEmpty($email);
     }
@@ -312,16 +312,16 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $expectedResult = [
             'attachments' => [
                 [
-                    'type' => 'file',
                     'filename' => '/path/to/file1.jpg',
                     'mimeType' => 'image/jpeg',
                     'name' => 'file1.jpg',
+                    'type' => 'file',
                 ],
                 [
-                    'type' => 'content',
                     'content' => 'text1',
                     'mimeType' => 'text/plain',
                     'name' => 'text1.txt',
+                    'type' => 'content',
                 ],
             ],
             'bccRecipients' => [
@@ -359,18 +359,18 @@ class EmailsTest extends BearFrameworkAddonTestCase
             'date' => 1514481017,
             'embeds' => [
                 [
-                    'type' => 'file',
                     'cid' => 'embed1',
                     'filename' => '/path/to/file2.jpg',
                     'mimeType' => 'image/jpeg',
                     'name' => 'file2.jpg',
+                    'type' => 'file',
                 ],
                 [
-                    'type' => 'content',
                     'cid' => 'embed2',
                     'content' => 'text2',
                     'mimeType' => 'text/plain',
                     'name' => 'text2.txt',
+                    'type' => 'content',
                 ],
             ],
             'headers' => [
@@ -407,15 +407,15 @@ class EmailsTest extends BearFrameworkAddonTestCase
             ],
             'signers' => [
                 [
-                    'type' => 'SMIME',
                     'certificate' => 'content of certificate.pem',
                     'privateKey' => 'content of private-key.pem',
+                    'type' => 'SMIME',
                 ],
                 [
-                    'type' => 'DKIM',
                     'domain' => 'example.com',
                     'privateKey' => 'content of private-key.pem',
                     'selector' => 'default',
+                    'type' => 'DKIM',
                 ],
             ],
             'subject' => 'The subject',
@@ -423,8 +423,24 @@ class EmailsTest extends BearFrameworkAddonTestCase
 
         $emailAsArray = $email->toArray();
         $emailAsJSON = $email->toJSON();
-        $this->assertTrue(serialize($expectedResult) === serialize($emailAsArray));
-        $this->assertTrue(json_encode($expectedResult) === $emailAsJSON);
+        $removeKeyProperties = function($data) use (&$removeKeyProperties) {
+            foreach ($data as $key => $value) {
+                if ($key === 'key') {
+                    unset($data['key']);
+                }
+                if (is_array($value)) {
+                    $data[$key] = $removeKeyProperties($value);
+                }
+            }
+            return $data;
+        };
+        $this->assertTrue(serialize($expectedResult) === serialize($removeKeyProperties($emailAsArray)));
+        $this->assertTrue(json_encode($expectedResult) === json_encode($removeKeyProperties(json_decode($emailAsJSON, true))));
+
+        $emailFromArray = $app->emails->makeFromArray($emailAsArray);
+        $emailFromJSON = $app->emails->makeFromJSON($emailAsJSON);
+        $this->assertTrue(serialize($expectedResult) === serialize($removeKeyProperties($emailFromArray->toArray())));
+        $this->assertTrue(serialize($expectedResult) === serialize($removeKeyProperties($emailFromJSON->toArray())));
     }
 
     /**

@@ -14,23 +14,28 @@ namespace BearFramework\Emails\Email;
  * @property string|null $name The name of the attachment.
  * @property string|null $mimeType The mime type of the attachment.
  */
-class FileAttachment
+class FileAttachment extends Attachment
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('filename', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('name', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('mimeType', [
-            'type' => '?string'
+        parent::__construct();
+        $this
+                ->defineProperty('type', [
+                    'type' => 'string',
+                    'get' => function() {
+                        return 'file';
+                    },
+                    'readonly' => true
+                ])
+                ->defineProperty('filename', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('name', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('mimeType', [
+                    'type' => '?string'
         ]);
     }
 

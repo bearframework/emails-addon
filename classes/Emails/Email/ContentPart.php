@@ -9,28 +9,28 @@
 
 namespace BearFramework\Emails\Email;
 
+use BearFramework\Models\Model;
+
 /**
  * @property string|null $content The value of content part.
  * @property string|null $mimeType The mime type of the content part.
  * @property string|null $encoding The encoding of the content part.
  */
-class ContentPart
+class ContentPart extends Model
 {
-
-    use \IvoPetkov\DataObjectTrait;
-    use \IvoPetkov\DataObjectToArrayTrait;
-    use \IvoPetkov\DataObjectToJSONTrait;
 
     function __construct()
     {
-        $this->defineProperty('content', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('mimeType', [
-            'type' => '?string'
-        ]);
-        $this->defineProperty('encoding', [
-            'type' => '?string'
+        parent::__construct();
+        $this
+                ->defineProperty('content', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('mimeType', [
+                    'type' => '?string'
+                ])
+                ->defineProperty('encoding', [
+                    'type' => '?string'
         ]);
     }
 

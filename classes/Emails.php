@@ -42,6 +42,26 @@ class Emails
     }
 
     /**
+     * Constructs a new email and returns it.
+     * 
+     * @return \BearFramework\Emails\Email
+     */
+    function makeFromArray(array $data): \BearFramework\Emails\Email
+    {
+        return \BearFramework\Emails\Email::fromArray($data);
+    }
+
+    /**
+     * Constructs a new email and returns it.
+     * 
+     * @return \BearFramework\Emails\Email
+     */
+    function makeFromJSON(string $data): \BearFramework\Emails\Email
+    {
+        return \BearFramework\Emails\Email::fromJSON($data);
+    }
+
+    /**
      * Sends a email.
      * 
      * @param \BearFramework\Emails\Email $email The email to send.
@@ -85,7 +105,7 @@ class Emails
     /**
      * Registers a email sender.
      * 
-     * @param string $class A class name, an object or a callback that returns a class name or and object.
+     * @param string $sender A class name, an object or a callback that returns a class name or and object.
      * @return void No value is returned.
      */
     function registerSender($sender): void

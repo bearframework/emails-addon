@@ -9,19 +9,20 @@
 
 namespace BearFramework\Emails\Email;
 
-use BearFramework\Emails\Email\FileAttachment;
-use BearFramework\Emails\Email\ContentAttachment;
+use BearFramework\Models\ModelsRepository;
 
 /**
  */
-class Attachments
+class Attachments extends ModelsRepository
 {
 
     /**
-     *
-     * @var array 
+     * 
      */
-    private $data = [];
+    public function __construct()
+    {
+        $this->setModel(Attachment::class);
+    }
 
     /**
      * Add a file.
@@ -40,7 +41,7 @@ class Attachments
         if ($mimeType !== null) {
             $attachment->mimeType = $mimeType;
         }
-        $this->data[] = $attachment;
+        $this->set($attachment);
     }
 
     /**
@@ -60,61 +61,39 @@ class Attachments
         if ($mimeType !== null) {
             $attachment->mimeType = $mimeType;
         }
-        $this->data[] = $attachment;
+        $this->set($attachment);
     }
 
     /**
-     * Removes the added attachments.
-     */
-    public function clear()
-    {
-        $this->data = [];
-    }
-
-    /**
-     * Returns a list of added attachments.
      * 
-     * @return array A list of added attachments.
+     * @param array $data
      */
-    public function getList()
+    public function __fromArray(array $data): void
     {
-        $list = new \IvoPetkov\DataList();
-        foreach ($this->data as $attachment) {
-            $list[] = clone($attachment);
-        }
-        return $list;
-    }
-
-    /**
-     * Returns the object data converted as an array
-     * 
-     * @return array The object data converted as an array
-     */
-    public function toArray()
-    {
-        $result = [];
-        foreach ($this->data as $attachment) {
-            $attachmentData = $attachment->toArray();
-            $type = 'unknown';
-            if ($attachment instanceof FileAttachment) {
-                $type = 'file';
-            } elseif ($attachment instanceof ContentAttachment) {
-                $type = 'content';
+        foreach ($data as $item) {
+            if (is_array($item) && isset($item['type'])) {
+                switch ($item['type']) {
+                    case 'content':
+                        $this->set(ContentAttachment::fromArray($item));
+                        break;
+                    case 'file':
+                        $this->set(FileAttachment::fromArray($item));
+                        break;
+                    default :
+                        $this->set(Attachment::fromArray($item));
+                        break;
+                }
             }
-            $attachmentData = array_merge(['type' => $type], $attachmentData);
-            $result[] = $attachmentData;
         }
-        return $result;
     }
 
     /**
-     * Returns the object data converted as JSON
      * 
-     * @return string The object data converted as JSON
+     * @param string $data
      */
-    public function toJSON()
+    public function __fromJSON(string $data): void
     {
-        return json_encode($this->toArray());
+        $this->__fromArray(json_decode($data, true));
     }
 
 }
