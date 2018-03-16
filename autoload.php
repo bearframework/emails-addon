@@ -7,4 +7,8 @@
  * Free to use under the MIT license.
  */
 
-BearFramework\Addons::register('bearframework/emails-addon', __DIR__);
+BearFramework\Addons::register('bearframework/emails-addon', __DIR__, [
+    'require' => [
+        'bearframework/models-addon'
+    ]
+]);
