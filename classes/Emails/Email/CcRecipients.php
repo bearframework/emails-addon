@@ -22,6 +22,7 @@ class CcRecipients extends ModelsRepository
     public function __construct()
     {
         $this->setModel(CcRecipient::class);
+        $this->useMemoryDataDriver();
     }
 
     /**

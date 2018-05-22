@@ -22,6 +22,7 @@ class ReplyToRecipients extends ModelsRepository
     public function __construct()
     {
         $this->setModel(ReplyToRecipient::class);
+        $this->useMemoryDataDriver();
     }
 
     /**

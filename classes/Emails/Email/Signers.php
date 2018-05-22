@@ -22,6 +22,7 @@ class Signers extends ModelsRepository
     public function __construct()
     {
         $this->setModel(Signer::class);
+        $this->useMemoryDataDriver();
     }
 
     /**

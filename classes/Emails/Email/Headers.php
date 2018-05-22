@@ -23,6 +23,7 @@ class Headers extends ModelsRepository
     public function __construct()
     {
         $this->setModel(Header::class);
+        $this->useMemoryDataDriver();
     }
 
     /**
@@ -45,7 +46,7 @@ class Headers extends ModelsRepository
      * @param \BearFramework\Emails\Email\Header $model
      * @throws \InvalidArgumentException
      */
-    public function set(\BearFramework\Models\Model $model)
+    public function set(\BearFramework\Models\Model $model): void
     {
         $lowerCaseName = strtolower($model->name);
         if (in_array($lowerCaseName, ['from', 'reply-to', 'to', 'cc', 'bcc', 'date', 'subject', 'return-path', 'x-priority'])) {

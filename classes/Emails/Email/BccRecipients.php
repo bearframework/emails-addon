@@ -22,6 +22,7 @@ class BccRecipients extends ModelsRepository
     public function __construct()
     {
         $this->setModel(BccRecipient::class);
+        $this->useMemoryDataDriver();
     }
 
     /**
