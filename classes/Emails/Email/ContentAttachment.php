@@ -17,7 +17,7 @@ namespace BearFramework\Emails\Email;
 class ContentAttachment extends Attachment
 {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this

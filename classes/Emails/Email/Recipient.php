@@ -18,7 +18,7 @@ use BearFramework\Models\Model;
 class Recipient extends Model
 {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this

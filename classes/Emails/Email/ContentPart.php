@@ -19,7 +19,7 @@ use BearFramework\Models\Model;
 class ContentPart extends Model
 {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this

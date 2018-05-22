@@ -18,7 +18,7 @@ namespace BearFramework\Emails\Email;
 class FileEmbed extends Embed
 {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this

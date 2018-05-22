@@ -33,7 +33,7 @@ class Emails
      * 
      * @return \BearFramework\Emails\Email
      */
-    function make(): \BearFramework\Emails\Email
+    public function make(): \BearFramework\Emails\Email
     {
         if (self::$newEmailCache === null) {
             self::$newEmailCache = new \BearFramework\Emails\Email();
@@ -46,7 +46,7 @@ class Emails
      * 
      * @return \BearFramework\Emails\Email
      */
-    function makeFromArray(array $data): \BearFramework\Emails\Email
+    public function makeFromArray(array $data): \BearFramework\Emails\Email
     {
         return \BearFramework\Emails\Email::fromArray($data);
     }
@@ -56,7 +56,7 @@ class Emails
      * 
      * @return \BearFramework\Emails\Email
      */
-    function makeFromJSON(string $data): \BearFramework\Emails\Email
+    public function makeFromJSON(string $data): \BearFramework\Emails\Email
     {
         return \BearFramework\Emails\Email::fromJSON($data);
     }
@@ -68,7 +68,7 @@ class Emails
      * @return void No value is returned.
      * @throws \Exception
      */
-    function send(\BearFramework\Emails\Email $email): void
+    public function send(\BearFramework\Emails\Email $email): void
     {
         $app = App::get();
         $email = clone($email);
@@ -108,7 +108,7 @@ class Emails
      * @param string $sender A class name, an object or a callback that returns a class name or and object.
      * @return void No value is returned.
      */
-    function registerSender($sender): void
+    public function registerSender($sender): void
     {
         $this->senders[] = $sender;
     }

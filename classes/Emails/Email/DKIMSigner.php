@@ -17,7 +17,7 @@ namespace BearFramework\Emails\Email;
 class DKIMSigner extends Signer
 {
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this
