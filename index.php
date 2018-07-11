@@ -14,8 +14,9 @@ $context = $app->context->get(__FILE__);
 
 $context->classes
         ->add('BearFramework\Emails', 'classes/Emails.php')
-        ->add('BearFramework\Emails\ISender', 'classes/Emails/ISender.php')
         ->add('BearFramework\Emails\Email', 'classes/Emails/Email.php')
+        ->add('BearFramework\Emails\ISender', 'classes/Emails/ISender.php')
+        ->add('BearFramework\Emails\Email\Attachment', 'classes/Emails/Email/Attachment.php')
         ->add('BearFramework\Emails\Email\Attachments', 'classes/Emails/Email/Attachments.php')
         ->add('BearFramework\Emails\Email\BccRecipient', 'classes/Emails/Email/BccRecipient.php')
         ->add('BearFramework\Emails\Email\BccRecipients', 'classes/Emails/Email/BccRecipients.php')
@@ -26,6 +27,7 @@ $context->classes
         ->add('BearFramework\Emails\Email\ContentEmbed', 'classes/Emails/Email/ContentEmbed.php')
         ->add('BearFramework\Emails\Email\ContentPart', 'classes/Emails/Email/ContentPart.php')
         ->add('BearFramework\Emails\Email\DKIMSigner', 'classes/Emails/Email/DKIMSigner.php')
+        ->add('BearFramework\Emails\Email\Embed', 'classes/Emails/Email/Embed.php')
         ->add('BearFramework\Emails\Email\Embeds', 'classes/Emails/Email/Embeds.php')
         ->add('BearFramework\Emails\Email\FileAttachment', 'classes/Emails/Email/FileAttachment.php')
         ->add('BearFramework\Emails\Email\FileEmbed', 'classes/Emails/Email/FileEmbed.php')
