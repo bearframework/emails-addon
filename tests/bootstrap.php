@@ -7,7 +7,7 @@
  * Free to use under the MIT license.
  */
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
  * 
@@ -49,6 +49,8 @@ class BearFrameworkAddonTestCase extends PHPUnit_Framework_TestCase
             $this->app->request->method = 'GET';
 
             $this->app->addons->add('bearframework/emails-addon');
+
+            require_once __DIR__ . '/classes.php';
         }
 
         return $this->app;
