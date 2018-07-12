@@ -82,7 +82,16 @@ class Signers extends ModelsRepository
      */
     public function makeFromJSON(string $data): \BearFramework\Models\Model
     {
-        return $this->makeFromArray(json_decode($data, true));
+        $decodedData = json_decode($data, true);
+        if (is_array($decodedData) && isset($decodedData['type'])) {
+            switch ($decodedData['type']) {
+                case 'SMIME':
+                    return SMIMESigner::fromJSON($data);
+                case 'DKIM':
+                    return DKIMSigner::fromJSON($data);
+            }
+        }
+        throw new \Exception('Invalid data provided!');
     }
 
 }

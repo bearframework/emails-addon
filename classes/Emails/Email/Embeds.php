@@ -96,7 +96,16 @@ class Embeds extends ModelsRepository
      */
     public function makeFromJSON(string $data): \BearFramework\Models\Model
     {
-        return $this->makeFromArray(json_decode($data, true));
+        $decodedData = json_decode($data, true);
+        if (is_array($decodedData) && isset($decodedData['type'])) {
+            switch ($decodedData['type']) {
+                case 'file':
+                    return FileEmbed::fromJSON($data);
+                case 'content':
+                    return ContentEmbed::fromJSON($data);
+            }
+        }
+        throw new \Exception('Invalid data provided!');
     }
 
 }
