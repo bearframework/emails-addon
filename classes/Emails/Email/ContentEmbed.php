@@ -33,7 +33,8 @@ class ContentEmbed extends Embed
                     'type' => '?string'
                 ])
                 ->defineProperty('content', [
-                    'type' => '?string'
+                    'type' => '?string',
+                    'encodeInJSON' => true
                 ])
                 ->defineProperty('name', [
                     'type' => '?string'

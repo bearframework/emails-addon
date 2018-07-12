@@ -29,7 +29,8 @@ class ContentAttachment extends Attachment
                     'readonly' => true
                 ])
                 ->defineProperty('content', [
-                    'type' => '?string'
+                    'type' => '?string',
+                    'encodeInJSON' => true
                 ])
                 ->defineProperty('name', [
                     'type' => '?string'
