@@ -21,6 +21,7 @@ class Recipients extends ModelsRepository
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setModel(Recipient::class);
         $this->useMemoryDataDriver();
     }

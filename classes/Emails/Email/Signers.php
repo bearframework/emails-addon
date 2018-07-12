@@ -21,6 +21,7 @@ class Signers extends ModelsRepository
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setModel(Signer::class);
         $this->useMemoryDataDriver();
     }
@@ -58,33 +59,30 @@ class Signers extends ModelsRepository
     /**
      * 
      * @param array $data
+     * @return \BearFramework\Models\Model
+     * @throws \Exception
      */
-    public function __fromArray(array $data): void
+    public function makeFromArray(array $data): \BearFramework\Models\Model
     {
-        foreach ($data as $item) {
-            if (is_array($item) && isset($item['type'])) {
-                switch ($item['type']) {
-                    case 'SMIME':
-                        $this->set(SMIMESigner::fromArray($item));
-                        break;
-                    case 'DKIM':
-                        $this->set(DKIMSigner::fromArray($item));
-                        break;
-                    default :
-                        $this->set(Signer::fromArray($item));
-                        break;
-                }
+        if (is_array($data) && isset($data['type'])) {
+            switch ($data['type']) {
+                case 'SMIME':
+                    return SMIMESigner::fromArray($data);
+                case 'DKIM':
+                    return DKIMSigner::fromArray($data);
             }
         }
+        throw new \Exception('Invalid data provided!');
     }
 
     /**
      * 
      * @param string $data
+     * @return \BearFramework\Models\Model
      */
-    public function __fromJSON(string $data): void
+    public function makeFromJSON(string $data): \BearFramework\Models\Model
     {
-        $this->__fromArray(json_decode($data, true));
+        return $this->makeFromArray(json_decode($data, true));
     }
 
 }

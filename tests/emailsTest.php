@@ -18,6 +18,29 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
      */
     public function testConstruct()
     {
+        $app = $this->getApp();
+
+        $fillEmailWithData = function($email) {
+            $email->subject = 'The subject';
+            $email->date = 1514481017;
+            $email->sender->email = 'sender@example.com';
+            $email->sender->name = 'John Smith';
+            $email->replyToRecipients->add('replyto@example.com', 'John');
+            $email->returnPath = 'bounce@example.com';
+            $email->priority = 3;
+            $email->recipients->add('recipient1@example.com', 'Mark Smith');
+            $email->recipients->add('recipient2@example.com', 'Bill Smith');
+            $email->content->add('<strong>Hi</strong>', 'text/html', 'utf-8');
+            $email->content->add('Hi', 'text/plain');
+            $email->attachments->addFile('/path/to/file1.jpg', 'file1.jpg', 'image/jpeg');
+            $email->attachments->addContent('text1', 'text1.txt', 'text/plain');
+            $email->embeds->addFile('embed1', '/path/to/file2.jpg', 'file2.jpg', 'image/jpeg');
+            $email->embeds->addContent('embed2', 'text2', 'text2.txt', 'text/plain');
+            $email->signers->addSMIME('content of certificate.pem', 'content of private-key.pem');
+            $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
+            $email->headers->add('X-Custom-1', 'value1');
+            $email->headers->add('X-Custom-2', 'value2');
+        };
 
         $checkIsEmpty = function($email) {
             $this->assertEquals($email->subject, null);
@@ -46,95 +69,93 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $this->assertEquals($headers->length, 0);
         };
 
-        $app = $this->getApp();
+        $checkIfDataIsCorrect = function($email) {
+            $this->assertEquals($email->subject, 'The subject');
+            $this->assertEquals($email->date, 1514481017);
+            $this->assertEquals($email->sender->email, 'sender@example.com');
+            $this->assertEquals($email->sender->name, 'John Smith');
+            $replyToRecipients = $email->replyToRecipients->getList();
+            $this->assertEquals($replyToRecipients[0]->email, 'replyto@example.com');
+            $this->assertEquals($replyToRecipients[0]->name, 'John');
+            $this->assertEquals($email->returnPath, 'bounce@example.com');
+            $this->assertEquals($email->priority, 3);
+            $recipients = $email->recipients->getList();
+            $this->assertEquals($recipients[0]->email, 'recipient1@example.com');
+            $this->assertEquals($recipients[0]->name, 'Mark Smith');
+            $this->assertEquals($recipients[1]->email, 'recipient2@example.com');
+            $this->assertEquals($recipients[1]->name, 'Bill Smith');
+            $contentParts = $email->content->getList();
+            $this->assertEquals($contentParts[0]->content, '<strong>Hi</strong>');
+            $this->assertEquals($contentParts[0]->mimeType, 'text/html');
+            $this->assertEquals($contentParts[0]->encoding, 'utf-8');
+            $this->assertEquals($contentParts[1]->content, 'Hi');
+            $this->assertEquals($contentParts[1]->mimeType, 'text/plain');
+            $this->assertEquals($contentParts[1]->encoding, null);
+            $attachments = $email->attachments->getList();
+            $this->assertTrue($attachments[0] instanceof \BearFramework\Emails\Email\FileAttachment);
+            $this->assertEquals($attachments[0]->filename, '/path/to/file1.jpg');
+            $this->assertEquals($attachments[0]->name, 'file1.jpg');
+            $this->assertEquals($attachments[0]->mimeType, 'image/jpeg');
+            $this->assertTrue($attachments[1] instanceof \BearFramework\Emails\Email\ContentAttachment);
+            $this->assertEquals($attachments[1]->content, 'text1');
+            $this->assertEquals($attachments[1]->name, 'text1.txt');
+            $this->assertEquals($attachments[1]->mimeType, 'text/plain');
+            $embeds = $email->embeds->getList();
+            $this->assertTrue($embeds[0] instanceof \BearFramework\Emails\Email\FileEmbed);
+            $this->assertEquals($embeds[0]->cid, 'embed1');
+            $this->assertEquals($embeds[0]->filename, '/path/to/file2.jpg');
+            $this->assertEquals($embeds[0]->name, 'file2.jpg');
+            $this->assertEquals($embeds[0]->mimeType, 'image/jpeg');
+            $this->assertTrue($embeds[1] instanceof \BearFramework\Emails\Email\ContentEmbed);
+            $this->assertEquals($embeds[1]->cid, 'embed2');
+            $this->assertEquals($embeds[1]->content, 'text2');
+            $this->assertEquals($embeds[1]->name, 'text2.txt');
+            $this->assertEquals($embeds[1]->mimeType, 'text/plain');
+            $signers = $email->signers->getList();
+            $this->assertTrue($signers[0] instanceof \BearFramework\Emails\Email\SMIMESigner);
+            $this->assertEquals($signers[0]->certificate, 'content of certificate.pem');
+            $this->assertEquals($signers[0]->privateKey, 'content of private-key.pem');
+            $this->assertTrue($signers[1] instanceof \BearFramework\Emails\Email\DKIMSigner);
+            $this->assertEquals($signers[1]->privateKey, 'content of private-key.pem');
+            $this->assertEquals($signers[1]->domain, 'example.com');
+            $this->assertEquals($signers[1]->selector, 'default');
+            $headers = $email->headers->getList();
+            $this->assertEquals($headers[0]->name, 'X-Custom-1');
+            $this->assertEquals($headers[0]->value, 'value1');
+            $this->assertEquals($headers[1]->name, 'X-Custom-2');
+            $this->assertEquals($headers[1]->value, 'value2');
+        };
+
+        $removeEmailData = function($email) {
+            $email->subject = null;
+            $email->date = null;
+            $email->sender->email = null;
+            $email->sender->name = null;
+            $email->replyToRecipients->deleteAll();
+            $email->returnPath = null;
+            $email->priority = null;
+            $email->recipients->deleteAll();
+            $email->content->deleteAll();
+            $email->attachments->deleteAll();
+            $email->embeds->deleteAll();
+            $email->signers->deleteAll();
+            $email->headers->deleteAll();
+        };
+
         $email = $app->emails->make();
-
+        $checkIsEmpty($email);
+        $fillEmailWithData($email);
+        $checkIfDataIsCorrect($email);
+        $removeEmailData($email);
         $checkIsEmpty($email);
 
-        $email->subject = 'The subject';
-        $email->date = 1514481017;
-        $email->sender->email = 'sender@example.com';
-        $email->sender->name = 'John Smith';
-        $email->replyToRecipients->add('replyto@example.com', 'John');
-        $email->returnPath = 'bounce@example.com';
-        $email->priority = 3;
-        $email->recipients->add('recipient1@example.com', 'Mark Smith');
-        $email->recipients->add('recipient2@example.com', 'Bill Smith');
-        $email->content->add('<strong>Hi</strong>', 'text/html', 'utf-8');
-        $email->content->add('Hi', 'text/plain');
-        $email->attachments->addFile('/path/to/file1.jpg', 'file1.jpg', 'image/jpeg');
-        $email->attachments->addContent('text1', 'text1.txt', 'text/plain');
-        $email->embeds->addFile('embed1', '/path/to/file2.jpg', 'file2.jpg', 'image/jpeg');
-        $email->embeds->addContent('embed2', 'text2', 'text2.txt', 'text/plain');
-        $email->signers->addSMIME('content of certificate.pem', 'content of private-key.pem');
-        $email->signers->addDKIM('content of private-key.pem', 'example.com', 'default');
-        $email->headers->add('X-Custom-1', 'value1');
-        $email->headers->add('X-Custom-2', 'value2');
+        $email = $app->emails->make();
+        $fillEmailWithData($email);
+        $checkIfDataIsCorrect($app->emails->makeFromJSON($email->toJSON()));
 
-        $this->assertEquals($email->subject, 'The subject');
-        $this->assertEquals($email->date, 1514481017);
-        $this->assertEquals($email->sender->email, 'sender@example.com');
-        $this->assertEquals($email->sender->name, 'John Smith');
-        $replyToRecipients = $email->replyToRecipients->getList();
-        $this->assertEquals($replyToRecipients[0]->email, 'replyto@example.com');
-        $this->assertEquals($replyToRecipients[0]->name, 'John');
-        $this->assertEquals($email->returnPath, 'bounce@example.com');
-        $this->assertEquals($email->priority, 3);
-        $recipients = $email->recipients->getList();
-        $this->assertEquals($recipients[0]->email, 'recipient1@example.com');
-        $this->assertEquals($recipients[0]->name, 'Mark Smith');
-        $this->assertEquals($recipients[1]->email, 'recipient2@example.com');
-        $this->assertEquals($recipients[1]->name, 'Bill Smith');
-        $contentParts = $email->content->getList();
-        $this->assertEquals($contentParts[0]->content, '<strong>Hi</strong>');
-        $this->assertEquals($contentParts[0]->mimeType, 'text/html');
-        $this->assertEquals($contentParts[0]->encoding, 'utf-8');
-        $this->assertEquals($contentParts[1]->content, 'Hi');
-        $this->assertEquals($contentParts[1]->mimeType, 'text/plain');
-        $this->assertEquals($contentParts[1]->encoding, null);
-        $attachments = $email->attachments->getList();
-        $this->assertEquals($attachments[0]->filename, '/path/to/file1.jpg');
-        $this->assertEquals($attachments[0]->name, 'file1.jpg');
-        $this->assertEquals($attachments[0]->mimeType, 'image/jpeg');
-        $this->assertEquals($attachments[1]->content, 'text1');
-        $this->assertEquals($attachments[1]->name, 'text1.txt');
-        $this->assertEquals($attachments[1]->mimeType, 'text/plain');
-        $embeds = $email->embeds->getList();
-        $this->assertEquals($embeds[0]->cid, 'embed1');
-        $this->assertEquals($embeds[0]->filename, '/path/to/file2.jpg');
-        $this->assertEquals($embeds[0]->name, 'file2.jpg');
-        $this->assertEquals($embeds[0]->mimeType, 'image/jpeg');
-        $this->assertEquals($embeds[1]->cid, 'embed2');
-        $this->assertEquals($embeds[1]->content, 'text2');
-        $this->assertEquals($embeds[1]->name, 'text2.txt');
-        $this->assertEquals($embeds[1]->mimeType, 'text/plain');
-        $signers = $email->signers->getList();
-        $this->assertEquals($signers[0]->certificate, 'content of certificate.pem');
-        $this->assertEquals($signers[0]->privateKey, 'content of private-key.pem');
-        $this->assertEquals($signers[1]->privateKey, 'content of private-key.pem');
-        $this->assertEquals($signers[1]->domain, 'example.com');
-        $this->assertEquals($signers[1]->selector, 'default');
-        $headers = $email->headers->getList();
-        $this->assertEquals($headers[0]->name, 'X-Custom-1');
-        $this->assertEquals($headers[0]->value, 'value1');
-        $this->assertEquals($headers[1]->name, 'X-Custom-2');
-        $this->assertEquals($headers[1]->value, 'value2');
-
-        $email->subject = null;
-        $email->date = null;
-        $email->sender->email = null;
-        $email->sender->name = null;
-        $email->replyToRecipients->deleteAll();
-        $email->returnPath = null;
-        $email->priority = null;
-        $email->recipients->deleteAll();
-        $email->content->deleteAll();
-        $email->attachments->deleteAll();
-        $email->embeds->deleteAll();
-        $email->signers->deleteAll();
-        $email->headers->deleteAll();
-
-        $checkIsEmpty($email);
+        $email = $app->emails->make();
+        $fillEmailWithData($email);
+        $checkIfDataIsCorrect($app->emails->makeFromArray($email->toArray()));
     }
 
     /**

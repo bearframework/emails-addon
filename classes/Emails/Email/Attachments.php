@@ -21,6 +21,7 @@ class Attachments extends ModelsRepository
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setModel(Attachment::class);
         $this->useMemoryDataDriver();
     }
@@ -68,33 +69,30 @@ class Attachments extends ModelsRepository
     /**
      * 
      * @param array $data
+     * @return \BearFramework\Models\Model
+     * @throws \Exception
      */
-    public function __fromArray(array $data): void
+    public function makeFromArray(array $data): \BearFramework\Models\Model
     {
-        foreach ($data as $item) {
-            if (is_array($item) && isset($item['type'])) {
-                switch ($item['type']) {
-                    case 'content':
-                        $this->set(ContentAttachment::fromArray($item));
-                        break;
-                    case 'file':
-                        $this->set(FileAttachment::fromArray($item));
-                        break;
-                    default :
-                        $this->set(Attachment::fromArray($item));
-                        break;
-                }
+        if (is_array($data) && isset($data['type'])) {
+            switch ($data['type']) {
+                case 'file':
+                    return FileAttachment::fromArray($data);
+                case 'content':
+                    return ContentAttachment::fromArray($data);
             }
         }
+        throw new \Exception('Invalid data provided!');
     }
 
     /**
      * 
      * @param string $data
+     * @return \BearFramework\Models\Model
      */
-    public function __fromJSON(string $data): void
+    public function makeFromJSON(string $data): \BearFramework\Models\Model
     {
-        $this->__fromArray(json_decode($data, true));
+        return $this->makeFromArray(json_decode($data, true));
     }
 
 }
