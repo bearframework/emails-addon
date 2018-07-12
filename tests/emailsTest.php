@@ -10,7 +10,7 @@
 /**
  * @runTestsInSeparateProcesses
  */
-class EmailsTest extends BearFrameworkAddonTestCase
+class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
 {
 
     /**
@@ -147,6 +147,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email = $app->emails->make();
         $app->emails->send($email);
         // expect no exception
+        $this->assertTrue(true);
     }
 
     /**
@@ -160,6 +161,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email = $app->emails->make();
         $app->emails->send($email);
         // expect no exception
+        $this->assertTrue(true);
     }
 
     /**
@@ -174,6 +176,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email = $app->emails->make();
         $app->emails->send($email);
         // expect no exception
+        $this->assertTrue(true);
     }
 
     /**
@@ -188,6 +191,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
         $email = $app->emails->make();
         $app->emails->send($email);
         // expect no exception
+        $this->assertTrue(true);
     }
 
     /**
@@ -230,7 +234,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';
-        $this->setExpectedException('Exception');
+        $this->expectException('Exception');
         $app->emails->send($email);
     }
 
@@ -430,7 +434,7 @@ class EmailsTest extends BearFrameworkAddonTestCase
     {
         $app = $this->getApp();
         $email = $app->emails->make();
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $email->headers->add('From', 'example@example.com');
     }
 

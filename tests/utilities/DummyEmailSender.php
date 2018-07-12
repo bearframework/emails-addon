@@ -16,13 +16,3 @@ class DummyEmailSender implements \BearFramework\Emails\ISender
     }
 
 }
-
-class DummyFaultyEmailSender implements \BearFramework\Emails\ISender
-{
-
-    public function send(\BearFramework\Emails\Email $email): bool
-    {
-        return false;
-    }
-
-}
