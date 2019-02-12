@@ -48,25 +48,25 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $this->assertEquals($email->sender->email, null);
             $this->assertEquals($email->sender->name, null);
             $replyToRecipients = $email->replyToRecipients->getList();
-            $this->assertEquals($replyToRecipients->length, 0);
+            $this->assertEquals($replyToRecipients->count(), 0);
             $ccRecipients = $email->ccRecipients->getList();
-            $this->assertEquals($ccRecipients->length, 0);
+            $this->assertEquals($ccRecipients->count(), 0);
             $bccRecipients = $email->bccRecipients->getList();
-            $this->assertEquals($bccRecipients->length, 0);
+            $this->assertEquals($bccRecipients->count(), 0);
             $this->assertEquals($email->returnPath, null);
             $this->assertEquals($email->priority, null);
             $recipients = $email->recipients->getList();
-            $this->assertEquals($recipients->length, 0);
+            $this->assertEquals($recipients->count(), 0);
             $contentParts = $email->content->getList();
-            $this->assertEquals($contentParts->length, 0);
+            $this->assertEquals($contentParts->count(), 0);
             $attachments = $email->attachments->getList();
-            $this->assertEquals($attachments->length, 0);
+            $this->assertEquals($attachments->count(), 0);
             $embeds = $email->embeds->getList();
-            $this->assertEquals($embeds->length, 0);
+            $this->assertEquals($embeds->count(), 0);
             $signers = $email->signers->getList();
-            $this->assertEquals($signers->length, 0);
+            $this->assertEquals($signers->count(), 0);
             $headers = $email->headers->getList();
-            $this->assertEquals($headers->length, 0);
+            $this->assertEquals($headers->count(), 0);
         };
 
         $checkIfDataIsCorrect = function($email) {
@@ -218,18 +218,18 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
     /**
      * 
      */
-    public function testHooks1()
+    public function testEvents1()
     {
         $app = $this->getApp();
         $app->emails->registerSender('DummyEmailSender');
 
         $log = '';
 
-        $app->hooks->add('emailSend', function (\BearFramework\Emails\Email $email) use (&$log) {
-            $log .= '1' . $email->sender->email;
+        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log) {
+            $log .= '1' . $details->email->sender->email;
         });
-        $app->hooks->add('emailSent', function (\BearFramework\Emails\Email $email) use (&$log) {
-            $log .= '2' . $email->sender->email;
+        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log) {
+            $log .= '2' . $details->email->sender->email;
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';
@@ -240,18 +240,18 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
     /**
      * Invalid sender
      */
-    public function testHooks2()
+    public function testEvents2()
     {
         $app = $this->getApp();
         $app->emails->registerSender('DummyFaultyEmailSender');
 
         $log = '';
 
-        $app->hooks->add('emailSend', function (\BearFramework\Emails\Email $email) use (&$log) {
-            $log .= '1' . $email->sender->email;
+        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log) {
+            $log .= '1' . $details->email->sender->email;
         });
-        $app->hooks->add('emailSent', function (\BearFramework\Emails\Email $email) use (&$log) {
-            $log .= '2' . $email->sender->email;
+        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log) {
+            $log .= '2' . $details->email->sender->email;
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';
@@ -262,19 +262,19 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
     /**
      * Canceled email
      */
-    public function testHooks3()
+    public function testEvents3()
     {
         $app = $this->getApp();
         $app->emails->registerSender('DummyEmailSender');
 
         $log = '';
 
-        $app->hooks->add('emailSend', function (\BearFramework\Emails\Email $email, &$preventDefault) use (&$log) {
-            $preventDefault = true;
-            $log .= '1' . $email->sender->email;
+        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log) {
+            $details->preventDefault = true;
+            $log .= '1' . $details->email->sender->email;
         });
-        $app->hooks->add('emailSent', function (\BearFramework\Emails\Email $email) use (&$log) {
-            $log .= '2' . $email->sender->email;
+        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log) {
+            $log .= '2' . $details->email->sender->email;
         });
         $email = $app->emails->make();
         $email->sender->email = 'example@example.com';
@@ -428,24 +428,22 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
 
         $emailAsArray = $email->toArray();
         $emailAsJSON = $email->toJSON();
-        $removeKeyProperties = function($data) use (&$removeKeyProperties) {
+        $removeIDProperties = function($data) use (&$removeIDProperties) {
             foreach ($data as $key => $value) {
-                if ($key === 'key') {
-                    unset($data['key']);
+                if ($key === 'id') {
+                    unset($data['id']);
                 }
                 if (is_array($value)) {
-                    $data[$key] = $removeKeyProperties($value);
+                    $data[$key] = $removeIDProperties($value);
                 }
             }
             return $data;
         };
-//        $this->assertTrue(serialize($expectedResult) === serialize($removeKeyProperties($emailAsArray)));
-//        $this->assertTrue(json_encode($expectedResult) === json_encode($removeKeyProperties(json_decode($emailAsJSON, true))));
 
         $emailFromArray = $app->emails->makeFromArray($emailAsArray);
         $emailFromJSON = $app->emails->makeFromJSON($emailAsJSON);
-        $this->assertTrue(serialize($expectedResult) === serialize($removeKeyProperties($emailFromArray->toArray())));
-        $this->assertTrue(serialize($expectedResult) === serialize($removeKeyProperties($emailFromJSON->toArray())));
+        $this->assertTrue(serialize($expectedResult) === serialize($removeIDProperties($emailFromArray->toArray())));
+        $this->assertTrue(serialize($expectedResult) === serialize($removeIDProperties($emailFromJSON->toArray())));
     }
 
     /**

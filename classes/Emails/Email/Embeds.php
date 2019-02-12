@@ -21,8 +21,7 @@ class Embeds extends ModelsRepository
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->setModel(Embed::class);
+        $this->setModel(Embed::class, 'id');
         $this->useMemoryDataDriver();
     }
 

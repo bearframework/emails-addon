@@ -21,8 +21,7 @@ class Content extends ModelsRepository
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->setModel(ContentPart::class);
+        $this->setModel(ContentPart::class, 'id');
         $this->useMemoryDataDriver();
     }
 

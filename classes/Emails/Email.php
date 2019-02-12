@@ -32,7 +32,6 @@ class Email extends Model
 
     public function __construct()
     {
-        parent::__construct();
         $this
                 ->defineProperty('sender', [
                     'init' => function() {
@@ -49,7 +48,8 @@ class Email extends Model
                 ->defineProperty('recipients', [
                     'type' => \BearFramework\Emails\Email\Recipients::class,
                     'readonly' => true
-                ])->defineProperty('ccRecipients', [
+                ])
+                ->defineProperty('ccRecipients', [
                     'init' => function() {
                         return new \BearFramework\Emails\Email\CcRecipients();
                     },
@@ -102,7 +102,8 @@ class Email extends Model
                         return new \BearFramework\Emails\Email\Headers();
                     },
                     'readonly' => true
-        ]);
+                ])
+        ;
     }
 
 }

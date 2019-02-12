@@ -20,7 +20,6 @@ class Header extends Model
 
     public function __construct()
     {
-        parent::__construct();
         $this
                 ->defineProperty('name', [
                     'type' => '?string'

@@ -21,8 +21,13 @@ class ContentPart extends Model
 
     public function __construct()
     {
-        parent::__construct();
         $this
+                ->defineProperty('id', [
+                    'type' => 'string',
+                    'init' => function() {
+                        return md5(uniqid());
+                    }
+                ])
                 ->defineProperty('content', [
                     'type' => '?string'
                 ])

@@ -20,7 +20,6 @@ class BccRecipient extends Model
 
     public function __construct()
     {
-        parent::__construct();
         $this
                 ->defineProperty('email', [
                     'type' => '?string'

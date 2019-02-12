@@ -21,8 +21,7 @@ class Attachments extends ModelsRepository
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->setModel(Attachment::class);
+        $this->setModel(Attachment::class, 'id');
         $this->useMemoryDataDriver();
     }
 

@@ -21,8 +21,7 @@ class CcRecipients extends ModelsRepository
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->setModel(CcRecipient::class);
+        $this->setModel(CcRecipient::class, 'email');
         $this->useMemoryDataDriver();
     }
 

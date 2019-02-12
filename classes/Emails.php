@@ -17,6 +17,8 @@ use BearFramework\App;
 class Emails
 {
 
+    use \BearFramework\App\EventsTrait;
+
     /**
      *
      */
@@ -73,10 +75,10 @@ class Emails
         $app = App::get();
         $email = clone($email);
 
-        if ($app->hooks->exists('emailSend')) {
-            $preventDefault = false;
-            $app->hooks->execute('emailSend', $email, $preventDefault);
-            if ($preventDefault) {
+        if ($this->hasEventListeners('beforeSendEmail')) {
+            $eventDetails = new \BearFramework\Emails\BeforeSendEmailEventDetails($email);
+            $this->dispatchEvent('beforeSendEmail', $eventDetails);
+            if ($eventDetails->preventDefault) {
                 return;
             }
         }
@@ -94,7 +96,10 @@ class Emails
             }
             if ($sender instanceof \BearFramework\Emails\ISender) {
                 if ($sender->send($email)) {
-                    $app->hooks->execute('emailSent', $email);
+                    if ($this->hasEventListeners('sendEmail')) {
+                        $eventDetails = new \BearFramework\Emails\SendEmailEventDetails($email);
+                        $this->dispatchEvent('sendEmail', $eventDetails);
+                    }
                     return;
                 }
             }
