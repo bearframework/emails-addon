@@ -17,7 +17,7 @@ use BearFramework\App;
 class Emails
 {
 
-    use \BearFramework\App\EventsTrait;
+    use \BearFramework\EventsTrait;
 
     /**
      *
