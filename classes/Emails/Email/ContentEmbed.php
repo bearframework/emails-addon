@@ -22,26 +22,25 @@ class ContentEmbed extends Embed
     {
         parent::__construct();
         $this
-                ->defineProperty('type', [
-                    'type' => 'string',
-                    'get' => function() {
-                        return 'content';
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('cid', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('content', [
-                    'type' => '?string',
-                    'encodeInJSON' => true
-                ])
-                ->defineProperty('name', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('mimeType', [
-                    'type' => '?string'
-        ]);
+            ->defineProperty('type', [
+                'type' => 'string',
+                'get' => function () {
+                    return 'content';
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('cid', [
+                'type' => '?string'
+            ])
+            ->defineProperty('content', [
+                'type' => '?string',
+                'encodeInJSON' => true
+            ])
+            ->defineProperty('name', [
+                'type' => '?string'
+            ])
+            ->defineProperty('mimeType', [
+                'type' => '?string'
+            ]);
     }
-
 }

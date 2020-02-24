@@ -20,19 +20,18 @@ class SMIMESigner extends Signer
     {
         parent::__construct();
         $this
-                ->defineProperty('type', [
-                    'type' => 'string',
-                    'get' => function() {
-                        return 'SMIME';
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('certificate', [
-                    'type' => 'string'
-                ])
-                ->defineProperty('privateKey', [
-                    'type' => 'string'
-        ]);
+            ->defineProperty('type', [
+                'type' => 'string',
+                'get' => function () {
+                    return 'SMIME';
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('certificate', [
+                'type' => 'string'
+            ])
+            ->defineProperty('privateKey', [
+                'type' => 'string'
+            ]);
     }
-
 }

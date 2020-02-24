@@ -106,5 +106,4 @@ class Embeds extends ModelsRepository
         }
         throw new \Exception('Invalid data provided!');
     }
-
 }

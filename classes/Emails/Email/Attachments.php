@@ -102,5 +102,4 @@ class Attachments extends ModelsRepository
         }
         throw new \Exception('Invalid data provided!');
     }
-
 }

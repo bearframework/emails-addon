@@ -21,12 +21,11 @@ class Header extends Model
     public function __construct()
     {
         $this
-                ->defineProperty('name', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('value', [
-                    'type' => '?string'
-        ]);
+            ->defineProperty('name', [
+                'type' => '?string'
+            ])
+            ->defineProperty('value', [
+                'type' => '?string'
+            ]);
     }
-
 }

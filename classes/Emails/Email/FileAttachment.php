@@ -21,22 +21,21 @@ class FileAttachment extends Attachment
     {
         parent::__construct();
         $this
-                ->defineProperty('type', [
-                    'type' => 'string',
-                    'get' => function() {
-                        return 'file';
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('filename', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('name', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('mimeType', [
-                    'type' => '?string'
-        ]);
+            ->defineProperty('type', [
+                'type' => 'string',
+                'get' => function () {
+                    return 'file';
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('filename', [
+                'type' => '?string'
+            ])
+            ->defineProperty('name', [
+                'type' => '?string'
+            ])
+            ->defineProperty('mimeType', [
+                'type' => '?string'
+            ]);
     }
-
 }

@@ -21,23 +21,22 @@ class ContentAttachment extends Attachment
     {
         parent::__construct();
         $this
-                ->defineProperty('type', [
-                    'type' => 'string',
-                    'get' => function() {
-                        return 'content';
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('content', [
-                    'type' => '?string',
-                    'encodeInJSON' => true
-                ])
-                ->defineProperty('name', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('mimeType', [
-                    'type' => '?string'
-        ]);
+            ->defineProperty('type', [
+                'type' => 'string',
+                'get' => function () {
+                    return 'content';
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('content', [
+                'type' => '?string',
+                'encodeInJSON' => true
+            ])
+            ->defineProperty('name', [
+                'type' => '?string'
+            ])
+            ->defineProperty('mimeType', [
+                'type' => '?string'
+            ]);
     }
-
 }

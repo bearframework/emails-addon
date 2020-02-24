@@ -54,5 +54,4 @@ class Headers extends ModelsRepository
         }
         parent::set($model);
     }
-
 }

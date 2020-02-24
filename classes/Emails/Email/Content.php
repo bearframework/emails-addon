@@ -44,5 +44,4 @@ class Content extends ModelsRepository
         }
         $this->set($contentPart);
     }
-
 }

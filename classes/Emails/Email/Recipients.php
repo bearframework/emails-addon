@@ -40,5 +40,4 @@ class Recipients extends ModelsRepository
         }
         $this->set($recipient);
     }
-
 }

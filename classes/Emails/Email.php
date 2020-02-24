@@ -33,77 +33,75 @@ class Email extends Model
     public function __construct()
     {
         $this
-                ->defineProperty('sender', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\Sender();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('replyToRecipients', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\ReplyToRecipients();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('recipients', [
-                    'type' => \BearFramework\Emails\Email\Recipients::class,
-                    'readonly' => true
-                ])
-                ->defineProperty('ccRecipients', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\CcRecipients();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('bccRecipients', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\BccRecipients();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('subject', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('date', [
-                    'type' => '?int'
-                ])
-                ->defineProperty('content', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\Content();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('returnPath', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('priority', [
-                    'type' => '?int'
-                ])
-                ->defineProperty('attachments', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\Attachments();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('embeds', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\Embeds();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('signers', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\Signers();
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('headers', [
-                    'init' => function() {
-                        return new \BearFramework\Emails\Email\Headers();
-                    },
-                    'readonly' => true
-                ])
-        ;
+            ->defineProperty('sender', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Sender();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('replyToRecipients', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\ReplyToRecipients();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('recipients', [
+                'type' => \BearFramework\Emails\Email\Recipients::class,
+                'readonly' => true
+            ])
+            ->defineProperty('ccRecipients', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\CcRecipients();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('bccRecipients', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\BccRecipients();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('subject', [
+                'type' => '?string'
+            ])
+            ->defineProperty('date', [
+                'type' => '?int'
+            ])
+            ->defineProperty('content', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Content();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('returnPath', [
+                'type' => '?string'
+            ])
+            ->defineProperty('priority', [
+                'type' => '?int'
+            ])
+            ->defineProperty('attachments', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Attachments();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('embeds', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Embeds();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('signers', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Signers();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('headers', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Headers();
+                },
+                'readonly' => true
+            ]);
     }
-
 }

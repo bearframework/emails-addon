@@ -40,5 +40,4 @@ class BccRecipients extends ModelsRepository
         }
         $this->set($bccRecipient);
     }
-
 }

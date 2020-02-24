@@ -92,5 +92,4 @@ class Signers extends ModelsRepository
         }
         throw new \Exception('Invalid data provided!');
     }
-
 }

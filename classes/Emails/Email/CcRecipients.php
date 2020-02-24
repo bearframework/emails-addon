@@ -40,5 +40,4 @@ class CcRecipients extends ModelsRepository
         }
         $this->set($ccRecipient);
     }
-
 }

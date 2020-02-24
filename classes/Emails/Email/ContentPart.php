@@ -22,21 +22,20 @@ class ContentPart extends Model
     public function __construct()
     {
         $this
-                ->defineProperty('id', [
-                    'type' => 'string',
-                    'init' => function() {
-                        return md5(uniqid());
-                    }
-                ])
-                ->defineProperty('content', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('mimeType', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('encoding', [
-                    'type' => '?string'
-        ]);
+            ->defineProperty('id', [
+                'type' => 'string',
+                'init' => function () {
+                    return md5(uniqid());
+                }
+            ])
+            ->defineProperty('content', [
+                'type' => '?string'
+            ])
+            ->defineProperty('mimeType', [
+                'type' => '?string'
+            ])
+            ->defineProperty('encoding', [
+                'type' => '?string'
+            ]);
     }
-
 }

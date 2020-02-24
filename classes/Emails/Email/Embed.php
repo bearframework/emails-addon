@@ -17,13 +17,12 @@ class Embed extends Model
     public function __construct()
     {
         $this
-                ->defineProperty('id', [
-                    'type' => 'string',
-                    'init' => function() {
-                        return md5(uniqid());
-                    }
-                ])
-        ;
+            ->defineProperty('id', [
+                'type' => 'string',
+                'init' => function () {
+                    return md5(uniqid());
+                }
+            ]);
     }
 
     /**
@@ -48,5 +47,4 @@ class Embed extends Model
             return parent::fromJSON($data);
         }
     }
-
 }

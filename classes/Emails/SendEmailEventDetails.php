@@ -24,11 +24,9 @@ class SendEmailEventDetails
     public function __construct(\BearFramework\Emails\Email $email)
     {
         $this
-                ->defineProperty('email', [
-                    'type' => \BearFramework\Emails\Email::class
-                ])
-        ;
+            ->defineProperty('email', [
+                'type' => \BearFramework\Emails\Email::class
+            ]);
         $this->email = $email;
     }
-
 }

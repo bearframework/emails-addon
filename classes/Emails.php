@@ -40,7 +40,7 @@ class Emails
         if (self::$newEmailCache === null) {
             self::$newEmailCache = new \BearFramework\Emails\Email();
         }
-        return clone(self::$newEmailCache);
+        return clone (self::$newEmailCache);
     }
 
     /**
@@ -73,7 +73,7 @@ class Emails
     public function send(\BearFramework\Emails\Email $email): void
     {
         $app = App::get();
-        $email = clone($email);
+        $email = clone ($email);
 
         if ($this->hasEventListeners('beforeSendEmail')) {
             $eventDetails = new \BearFramework\Emails\BeforeSendEmailEventDetails($email);
@@ -117,5 +117,4 @@ class Emails
     {
         $this->senders[] = $sender;
     }
-
 }

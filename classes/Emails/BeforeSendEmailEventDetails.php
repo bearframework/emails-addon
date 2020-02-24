@@ -25,17 +25,15 @@ class BeforeSendEmailEventDetails
     public function __construct(\BearFramework\Emails\Email $email)
     {
         $this
-                ->defineProperty('email', [
-                    'type' => \BearFramework\Emails\Email::class
-                ])
-                ->defineProperty('preventDefault', [
-                    'type' => 'bool',
-                    'init' => function() {
-                        return false;
-                    }
-                ])
-        ;
+            ->defineProperty('email', [
+                'type' => \BearFramework\Emails\Email::class
+            ])
+            ->defineProperty('preventDefault', [
+                'type' => 'bool',
+                'init' => function () {
+                    return false;
+                }
+            ]);
         $this->email = $email;
     }
-
 }

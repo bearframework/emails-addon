@@ -40,5 +40,4 @@ class ReplyToRecipients extends ModelsRepository
         }
         $this->set($replyToRecipient);
     }
-
 }

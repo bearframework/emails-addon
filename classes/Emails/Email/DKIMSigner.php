@@ -21,22 +21,21 @@ class DKIMSigner extends Signer
     {
         parent::__construct();
         $this
-                ->defineProperty('type', [
-                    'type' => 'string',
-                    'get' => function() {
-                        return 'DKIM';
-                    },
-                    'readonly' => true
-                ])
-                ->defineProperty('privateKey', [
-                    'type' => 'string'
-                ])
-                ->defineProperty('domain', [
-                    'type' => 'string'
-                ])
-                ->defineProperty('selector', [
-                    'type' => 'string'
-        ]);
+            ->defineProperty('type', [
+                'type' => 'string',
+                'get' => function () {
+                    return 'DKIM';
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('privateKey', [
+                'type' => 'string'
+            ])
+            ->defineProperty('domain', [
+                'type' => 'string'
+            ])
+            ->defineProperty('selector', [
+                'type' => 'string'
+            ]);
     }
-
 }

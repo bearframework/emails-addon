@@ -21,12 +21,11 @@ class BccRecipient extends Model
     public function __construct()
     {
         $this
-                ->defineProperty('email', [
-                    'type' => '?string'
-                ])
-                ->defineProperty('name', [
-                    'type' => '?string'
-        ]);
+            ->defineProperty('email', [
+                'type' => '?string'
+            ])
+            ->defineProperty('name', [
+                'type' => '?string'
+            ]);
     }
-
 }
