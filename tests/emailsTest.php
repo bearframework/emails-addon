@@ -20,7 +20,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
     {
         $app = $this->getApp();
 
-        $fillEmailWithData = function($email) {
+        $fillEmailWithData = function ($email) {
             $email->subject = 'The subject';
             $email->date = 1514481017;
             $email->sender->email = 'sender@example.com';
@@ -42,7 +42,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $email->headers->add('X-Custom-2', 'value2');
         };
 
-        $checkIsEmpty = function($email) {
+        $checkIsEmpty = function ($email) {
             $this->assertEquals($email->subject, null);
             $this->assertEquals($email->date, null);
             $this->assertEquals($email->sender->email, null);
@@ -69,7 +69,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $this->assertEquals($headers->count(), 0);
         };
 
-        $checkIfDataIsCorrect = function($email) {
+        $checkIfDataIsCorrect = function ($email) {
             $this->assertEquals($email->subject, 'The subject');
             $this->assertEquals($email->date, 1514481017);
             $this->assertEquals($email->sender->email, 'sender@example.com');
@@ -126,7 +126,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $this->assertEquals($headers[1]->value, 'value2');
         };
 
-        $removeEmailData = function($email) {
+        $removeEmailData = function ($email) {
             $email->subject = null;
             $email->date = null;
             $email->sender->email = null;
@@ -428,7 +428,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
 
         $emailAsArray = $email->toArray();
         $emailAsJSON = $email->toJSON();
-        $removeIDProperties = function($data) use (&$removeIDProperties) {
+        $removeIDProperties = function ($data) use (&$removeIDProperties) {
             foreach ($data as $key => $value) {
                 if ($key === 'id') {
                     unset($data['id']);
@@ -480,5 +480,4 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
         $email->embeds->addContent('cid2', $notBinaryContent, 'file2.jpg', 'image/jpg');
         $this->assertTrue($email->embeds->getList()[1]->content === $notBinaryContent);
     }
-
 }
