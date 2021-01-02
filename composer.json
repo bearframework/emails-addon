@@ -18,11 +18,10 @@
     "require": {
         "php": ">=7.1",
         "bearframework/bearframework": "1.*",
-        "bearframework/models-addon": "0.3.*|0.4.*"
+        "bearframework/models-addon": "1.*"
     },
     "require-dev": {
-        "bearframework/addon-tests": "0.3.*",
-        "phpunit/phpunit": "7.*"
+        "bearframework/addon-tests": "1.*"
     },
     "autoload": {
         "files": [
