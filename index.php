@@ -13,10 +13,10 @@ $app = App::get();
 $context = $app->contexts->get(__DIR__);
 
 $context->classes
-        ->add('BearFramework\Emails', 'classes/Emails.php')
-        ->add('BearFramework\Emails\*', 'classes/Emails/*.php');
+    ->add('BearFramework\Emails', 'classes/Emails.php')
+    ->add('BearFramework\Emails\*', 'classes/Emails/*.php');
 
 $app->shortcuts
-        ->add('emails', function() {
-            return new \BearFramework\Emails();
-        });
+    ->add('emails', function () {
+        return new \BearFramework\Emails();
+    });
