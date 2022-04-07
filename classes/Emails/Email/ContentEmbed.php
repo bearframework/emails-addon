@@ -27,7 +27,7 @@ class ContentEmbed extends Embed
                 'get' => function () {
                     return 'content';
                 },
-                'readonly' => true
+                //'readonly' => true // Fix for models-addon v1.4
             ])
             ->defineProperty('cid', [
                 'type' => '?string'

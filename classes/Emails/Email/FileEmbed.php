@@ -27,7 +27,7 @@ class FileEmbed extends Embed
                 'get' => function () {
                     return 'file';
                 },
-                'readonly' => true
+                //'readonly' => true // Fix for models-addon v1.4
             ])
             ->defineProperty('cid', [
                 'type' => '?string'

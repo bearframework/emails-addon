@@ -26,7 +26,7 @@ class ContentAttachment extends Attachment
                 'get' => function () {
                     return 'content';
                 },
-                'readonly' => true
+                //'readonly' => true // Fix for models-addon v1.4
             ])
             ->defineProperty('content', [
                 'type' => '?string',

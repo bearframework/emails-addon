@@ -25,7 +25,7 @@ class SMIMESigner extends Signer
                 'get' => function () {
                     return 'SMIME';
                 },
-                'readonly' => true
+                //'readonly' => true // Fix for models-addon v1.4
             ])
             ->defineProperty('certificate', [
                 'type' => 'string'

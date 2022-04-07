@@ -26,7 +26,7 @@ class DKIMSigner extends Signer
                 'get' => function () {
                     return 'DKIM';
                 },
-                'readonly' => true
+                //'readonly' => true // Fix for models-addon v1.4
             ])
             ->defineProperty('privateKey', [
                 'type' => 'string'
