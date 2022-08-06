@@ -72,7 +72,6 @@ class Emails
      */
     public function send(\BearFramework\Emails\Email $email): void
     {
-        $app = App::get();
         $email = clone ($email);
 
         if ($this->hasEventListeners('beforeSendEmail')) {
@@ -84,7 +83,7 @@ class Emails
         }
 
         if (empty($this->senders)) {
-            throw new \Exception('No email senders added.');
+            throw new \Exception('No email senders added!');
         }
 
         foreach ($this->senders as $sender) {
@@ -104,7 +103,8 @@ class Emails
                 }
             }
         }
-        throw new \Exception('No email sender is capable of sending the email provided.');
+        $senderEmail = $email->sender->email;
+        throw new \Exception($senderEmail !== null ? 'Not found sender for ' . $senderEmail . '!' : 'No sender email specified!');
     }
 
     /**
