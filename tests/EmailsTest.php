@@ -218,6 +218,19 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
     /**
      * 
      */
+    public function testSend5()
+    {
+        $app = $this->getApp();
+        $app->emails->registerNullSender();
+        $email = $app->emails->make();
+        $app->emails->send($email);
+        // expect no exception
+        $this->assertTrue(true);
+    }
+
+    /**
+     * 
+     */
     public function testEvents1()
     {
         $app = $this->getApp();
@@ -362,6 +375,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
                 ],
             ],
             'date' => 1514481017,
+            'details' => [],
             'embeds' => [
                 [
                     'cid' => 'embed1',
@@ -479,5 +493,25 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
         $this->assertTrue($email->attachments->getList()[1]->content === $notBinaryContent);
         $email->embeds->addContent('cid2', $notBinaryContent, 'file2.jpg', 'image/jpg');
         $this->assertTrue($email->embeds->getList()[1]->content === $notBinaryContent);
+    }
+
+    /**
+     * 
+     */
+    public function testDetails()
+    {
+        $app = $this->getApp();
+        $email = $app->emails->make();
+        $email->sender->email = 'example@example.com';
+        $email->details->set('key1', 'value1');
+        $email->details->set('key2', [1, '2']);
+
+        $emailFromArray = $app->emails->makeFromArray($email->toArray());
+        $this->assertEquals($emailFromArray->details->get('key1'), 'value1');
+        $this->assertEquals($emailFromArray->details->get('key2'), [1, '2']);
+
+        $emailFromJSON = $app->emails->makeFromJSON($email->toJSON());
+        $this->assertEquals($emailFromJSON->details->get('key1'), 'value1');
+        $this->assertEquals($emailFromJSON->details->get('key2'), [1, '2']);
     }
 }
