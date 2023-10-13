@@ -26,6 +26,7 @@ use BearFramework\Models\Model;
  * @property-read \BearFramework\Emails\Email\Embeds $embeds
  * @property-read \BearFramework\Emails\Email\Signers $signers
  * @property-read \BearFramework\Emails\Email\Headers $headers
+ * @property-read \BearFramework\Emails\Email\Details $details
  */
 class Email extends Model
 {
@@ -100,6 +101,12 @@ class Email extends Model
             ->defineProperty('headers', [
                 'init' => function () {
                     return new \BearFramework\Emails\Email\Headers();
+                },
+                'readonly' => true
+            ])
+            ->defineProperty('details', [
+                'init' => function () {
+                    return new \BearFramework\Emails\Email\Details();
                 },
                 'readonly' => true
             ]);
