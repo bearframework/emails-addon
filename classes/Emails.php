@@ -111,10 +111,30 @@ class Emails
      * Registers a email sender.
      * 
      * @param string $sender A class name, an object or a callback that returns a class name or and object.
-     * @return void No value is returned.
+     * @return self Returns a reference to itself.
      */
-    public function registerSender($sender): void
+    public function registerSender($sender): self
     {
         $this->senders[] = $sender;
+        return $this;
+    }
+
+    /**
+     * Registers a sender that does nothing.
+     *
+     * @return self Returns a reference to itself.
+     */
+    public function registerNullSender(): self
+    {
+        $this->senders[] = function () {
+            return new class implements \BearFramework\Emails\ISender
+            {
+                public function send(\BearFramework\Emails\Email $email): bool
+                {
+                    return true;
+                }
+            };
+        };
+        return $this;
     }
 }
