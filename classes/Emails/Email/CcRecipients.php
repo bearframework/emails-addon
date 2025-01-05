@@ -31,7 +31,7 @@ class CcRecipients extends ModelsRepository
      * @param string $email The cc recipient email address.
      * @param string|null $name The cc recipient name.
      */
-    public function add(string $email, string $name = null): void
+    public function add(string $email, ?string $name = null): void
     {
         $ccRecipient = $this->make();
         $ccRecipient->email = $email;

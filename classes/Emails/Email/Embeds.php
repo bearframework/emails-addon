@@ -33,7 +33,7 @@ class Embeds extends ModelsRepository
      * @param string|null $name The name of the embed.
      * @param string|null $mimeType The mime type of the embed.
      */
-    public function addFile(string $cid, string $filename, string $name = null, string $mimeType = null): void
+    public function addFile(string $cid, string $filename, ?string $name = null, ?string $mimeType = null): void
     {
         $embed = new FileEmbed();
         $embed->cid = $cid;
@@ -55,7 +55,7 @@ class Embeds extends ModelsRepository
      * @param string|null $name The name of the embed.
      * @param string|null $mimeType The mime type of the embed.
      */
-    public function addContent(string $cid, string $content, string $name = null, string $mimeType = null): void
+    public function addContent(string $cid, string $content, ?string $name = null, ?string $mimeType = null): void
     {
         $embed = new ContentEmbed();
         $embed->cid = $cid;

@@ -32,7 +32,7 @@ class Content extends ModelsRepository
      * @param string|null $mimeType The mime type of the content part.
      * @param string|null $encoding The encoding of the content part.
      */
-    public function add(string $content, string $mimeType = null, $encoding = null): void
+    public function add(string $content, ?string $mimeType = null, $encoding = null): void
     {
         $contentPart = $this->make();
         $contentPart->content = $content;

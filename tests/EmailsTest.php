@@ -20,7 +20,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
     {
         $app = $this->getApp();
 
-        $fillEmailWithData = function ($email) {
+        $fillEmailWithData = function ($email): void {
             $email->subject = 'The subject';
             $email->date = 1514481017;
             $email->sender->email = 'sender@example.com';
@@ -42,7 +42,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $email->headers->add('X-Custom-2', 'value2');
         };
 
-        $checkIsEmpty = function ($email) {
+        $checkIsEmpty = function ($email): void {
             $this->assertEquals($email->subject, null);
             $this->assertEquals($email->date, null);
             $this->assertEquals($email->sender->email, null);
@@ -69,7 +69,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $this->assertEquals($headers->count(), 0);
         };
 
-        $checkIfDataIsCorrect = function ($email) {
+        $checkIfDataIsCorrect = function ($email): void {
             $this->assertEquals($email->subject, 'The subject');
             $this->assertEquals($email->date, 1514481017);
             $this->assertEquals($email->sender->email, 'sender@example.com');
@@ -126,7 +126,7 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
             $this->assertEquals($headers[1]->value, 'value2');
         };
 
-        $removeEmailData = function ($email) {
+        $removeEmailData = function ($email): void {
             $email->subject = null;
             $email->date = null;
             $email->sender->email = null;
@@ -238,10 +238,10 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
 
         $log = '';
 
-        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log) {
+        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log): void {
             $log .= '1' . $details->email->sender->email;
         });
-        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log) {
+        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log): void {
             $log .= '2' . $details->email->sender->email;
         });
         $email = $app->emails->make();
@@ -260,10 +260,10 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
 
         $log = '';
 
-        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log) {
+        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log): void {
             $log .= '1' . $details->email->sender->email;
         });
-        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log) {
+        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log): void {
             $log .= '2' . $details->email->sender->email;
         });
         $email = $app->emails->make();
@@ -282,11 +282,11 @@ class EmailsTest extends BearFramework\AddonTests\PHPUnitTestCase
 
         $log = '';
 
-        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log) {
+        $app->emails->addEventListener('beforeSendEmail', function (\BearFramework\Emails\BeforeSendEmailEventDetails $details) use (&$log): void {
             $details->preventDefault = true;
             $log .= '1' . $details->email->sender->email;
         });
-        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log) {
+        $app->emails->addEventListener('sendEmail', function (\BearFramework\Emails\SendEmailEventDetails $details) use (&$log): void {
             $log .= '2' . $details->email->sender->email;
         });
         $email = $app->emails->make();

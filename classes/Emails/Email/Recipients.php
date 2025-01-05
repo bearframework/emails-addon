@@ -31,7 +31,7 @@ class Recipients extends ModelsRepository
      * @param string $email The recipient email address.
      * @param string|null $name The recipient name.
      */
-    public function add(string $email, string $name = null): void
+    public function add(string $email, ?string $name = null): void
     {
         $recipient = $this->make();
         $recipient->email = $email;

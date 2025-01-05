@@ -31,7 +31,7 @@ class BccRecipients extends ModelsRepository
      * @param string $email The bcc recipient email address.
      * @param string|null $name The bcc recipient name.
      */
-    public function add(string $email, string $name = null): void
+    public function add(string $email, ?string $name = null): void
     {
         $bccRecipient = $this->make();
         $bccRecipient->email = $email;

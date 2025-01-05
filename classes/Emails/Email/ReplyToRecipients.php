@@ -31,7 +31,7 @@ class ReplyToRecipients extends ModelsRepository
      * @param string $email The reply to recipient email address.
      * @param string|null $name The reply to recipient name.
      */
-    public function add(string $email, string $name = null): void
+    public function add(string $email, ?string $name = null): void
     {
         $replyToRecipient = $this->make();
         $replyToRecipient->email = $email;

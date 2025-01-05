@@ -32,7 +32,7 @@ class Attachments extends ModelsRepository
      * @param string|null $name The file name.
      * @param string|null $mimeType The mime type of the attachment.
      */
-    public function addFile(string $filename, string $name = null, string $mimeType = null): void
+    public function addFile(string $filename, ?string $name = null, ?string $mimeType = null): void
     {
         $attachment = new FileAttachment();
         $attachment->filename = $filename;
@@ -52,7 +52,7 @@ class Attachments extends ModelsRepository
      * @param string|null $name The file name.
      * @param string|null $mimeType The mime type of the attachment.
      */
-    public function addContent(string $content, string $name = null, string $mimeType = null): void
+    public function addContent(string $content, ?string $name = null, ?string $mimeType = null): void
     {
         $attachment = new ContentAttachment();
         $attachment->content = $content;

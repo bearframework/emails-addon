@@ -64,7 +64,7 @@ class Emails
     }
 
     /**
-     * Sends a email.
+     * Sends an email.
      * 
      * @param \BearFramework\Emails\Email $email The email to send.
      * @return void No value is returned.
